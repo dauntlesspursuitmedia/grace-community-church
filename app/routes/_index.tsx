@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import type { MetaFunction } from "@vercel/remix";
 
 export const meta: MetaFunction = () => {
@@ -10,9 +11,10 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
+      <h1 className="text-9xl font-bold">Welcome to Remix</h1>
       <ul>
         <li>
+					<Link to="/studio">About</Link>
           <a
             target="_blank"
             href="https://remix.run/tutorials/blog"
