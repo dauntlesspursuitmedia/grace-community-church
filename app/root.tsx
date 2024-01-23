@@ -1,5 +1,4 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction } from "@remix-run/node";
+
 import {
   Links,
   LiveReload,
@@ -10,7 +9,7 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import { LoaderFunctionArgs, json } from "@vercel/remix";
-
+import "@fontsource-variable/dm-sans/standard.css"
 import "~/styles/tailwind.css";
 import {
   frontendUrl,
@@ -19,6 +18,8 @@ import {
 } from "./sanity/projectDetails";
 import { Suspense } from "react";
 import VisualEditing from "./components/VisualEditing";
+import { Logo } from "./components/Logo";
+import { LogoMark } from "./components/LogoMark";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const stegaEnabled = isStegaEnabled(request.url);
@@ -50,7 +51,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="bg-cream font-sans">
         {sanity.isStudioRoute ? (
           <Outlet />
         ) : (

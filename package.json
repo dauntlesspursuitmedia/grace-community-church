@@ -11,6 +11,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@fontsource-variable/dm-sans": "^5.0.3",
     "@portabletext/react": "^3.0.11",
     "@remix-run/css-bundle": "^2.5.0",
     "@remix-run/node": "^2.5.0",
@@ -32,6 +33,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sanity": "^3.24.1",
+    "sanity-plugin-media": "^2.2.5",
     "zod": "^3.22.4"
   },
   "devDependencies": {
