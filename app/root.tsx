@@ -18,15 +18,54 @@ import {
 } from "./sanity/projectDetails";
 import { Suspense } from "react";
 import VisualEditing from "./components/VisualEditing";
-import { Logo } from "./components/Logo";
-import { LogoMark } from "./components/LogoMark";
+import { SITE_CONFIG_QUERY } from "./sanity/queries";
+import { loadQuery } from "./sanity/loader.server";
+import { SiteConfigDocument, siteConfigZ } from "./types/siteConfig";
+import { useQuery } from "./sanity/loader";
+import { Layout } from "./components/Layout";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const stegaEnabled = isStegaEnabled(request.url);
+	const {pathname} = new URL(request.url)
+	const isStudioRoute = pathname.startsWith("/studio")
+
+	if(isStudioRoute) {
+		return json({
+      sanity: {
+        isStudioRoute,
+        stegaEnabled,
+      },
+      ENV: {
+        SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID!,
+        SANITY_STUDIO_DATASET: process.env.SANITY_STUDIO_DATASET!,
+        SANITY_STUDIO_API_VERSION: process.env.SANITY_STUDIO_API_VERSION!,
+        // URL of the Frontend that will be loaded into Presentation
+        SANITY_FRONTEND_URL: frontendUrl,
+        // URL of the Studio to allow requests from Presentation
+        SANITY_STUDIO_URL: studioUrl,
+      },
+    });
+	}
+	const initial = await loadQuery<SiteConfigDocument>(
+		SITE_CONFIG_QUERY,
+		{},
+		{
+			perspective: stegaEnabled ? "previewDrafts": "published",
+		}
+	).then(res => ({
+		...res,
+		data: res.data ? siteConfigZ.parse(res.data) : undefined,
+	}))
+
+
+
 
   return json({
+		initial,
+		query: SITE_CONFIG_QUERY,
+		params: {},
     sanity: {
-      isStudioRoute: new URL(request.url).pathname.startsWith("/studio"),
+      isStudioRoute,
       stegaEnabled,
     },
     ENV: {
@@ -42,7 +81,13 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function App() {
-  const { sanity, ENV } = useLoaderData<typeof loader>();
+  const { sanity, ENV, initial, query, params } =
+    useLoaderData<typeof loader>();
+
+  const { data, loading } = useQuery<typeof initial.data>(query, params, {
+    initial
+  });
+
   return (
     <html lang="en">
       <head>
@@ -56,9 +101,9 @@ export default function App() {
           <Outlet />
         ) : (
           <>
-            {/* <Layout home={loading || !data ? initial.data : data} theme={theme}> */}
-            <Outlet />
-            {/* </Layout> */}
+            <Layout siteConfig={loading || !data ? initial.data : data}>
+              <Outlet />
+            </Layout>
           </>
         )}
         {/* <Outlet /> */}
