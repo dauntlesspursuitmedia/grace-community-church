@@ -31,15 +31,15 @@ export const Header = ({
           key={link._key}
           to={link?.item?.slug ?? ""}
           prefetch="intent"
-          className="text-white hover:text-white uppercase tracking-[1.6px] text-base"
+          className={({isActive}) => cn(`text-white hover:text-yellow uppercase transition-colors duration-150 tracking-[1.6px] text-base`, isActive && " font-bold hover:text-white border-b-2 border-green")}
         >
           {link?.itemName ?? link?.item?.title}
         </NavLink>
       ))}
 
 				</nav>
-				<Link prefetch="intent" className="p-4 border-white border-[1px] text-white uppercase tracking-[1.6px]" to="livestream">Livestream</Link>
-        {/* <pre>{JSON.stringify(navigation, null, 2)}</pre> */}
+				<Link prefetch="intent" className="p-4 border-white border-[1px] text-white uppercase tracking-[1.6px] hover:bg-green hover:border-green transition-colors shadow-sm duration-150 ease-in-out hover:shadow-md" to="livestream">Livestream</Link>
+
       </div>
     </header>
   );

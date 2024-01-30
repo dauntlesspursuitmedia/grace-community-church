@@ -96,7 +96,7 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="bg-cream font-sans">
+      <body className="bg-cream font-sans flex flex-col min-h-dvh">
         {sanity.isStudioRoute ? (
           <Outlet />
         ) : (

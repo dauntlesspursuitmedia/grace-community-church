@@ -12,7 +12,7 @@ export default function Index() {
   return (
 		<section>
 			<img alt="" src="https://picsum.photos/1600/900" width={1600} height={900} className="w-full"  />
-			tehis is a section
+
 		</section>
   );
 }
