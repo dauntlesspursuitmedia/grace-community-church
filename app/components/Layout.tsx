@@ -2,6 +2,7 @@ import { PropsWithChildren } from "react";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 import type { SiteConfigDocument } from "~/types/siteConfig";
+import { Link } from "@remix-run/react";
 
 export type LayoutProps = PropsWithChildren<
 {siteConfig?: SiteConfigDocument}>
