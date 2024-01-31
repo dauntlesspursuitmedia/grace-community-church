@@ -22,18 +22,15 @@ export const HeroModule = (props: HeroModuleProps) => {
 
 					{props?.actions?.map((action) => {
 						return (
-							<Link to={action.internalLink?.slug ?? ""} prefetch="intent" className="first:bg-yellow first:border-0 p-4 border-white border-[1px] text-white uppercase tracking-[1.6px] hover:bg-green hover:border-green transition-colors shadow-sm duration-150 ease-in-out hover:shadow-md" key={action._key}>
+							<Link to={action.internalLink?.slug ?? ""} prefetch="intent" className="first:bg-yellow first:border-0 first:hover:bg-yellow-lighter first:focus:bg-yellow-lighter p-4 border-white border-[1px] text-white uppercase tracking-[1.6px] hover:bg-white hover:border-white hover:text-black	focus:text-black focus:bg-white focus:border-white transition-colors shadow-sm duration-150 ease-in-out hover:shadow-md" key={action._key}>
 								{action.title}
 							</Link>
 						)
 					})}
 					</div>
 				</div>
-
-
-        <div>col 2</div>
+				{/* @Todo put section for special events here */}
       </div>
-      {/* <pre>{JSON.stringify(props, null, 2)}</pre> */}
     </section>
   );
 };
