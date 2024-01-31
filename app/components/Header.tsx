@@ -17,11 +17,11 @@ export const Header = ({
   return (
     <header
       className={cn(
-        "py-6",
+        "py-6 px-8",
         pathname === "/" ? "fixed backdrop-blur-lg bg-transparent border-b-[1px] border-white w-full" : "bg-green-dark relative"
       )}
     >
-      <div className="container mx-auto flex justify-between items-center">
+      <div className="container mx-auto flex  justify-between items-center">
         <Link to="/" prefetch="intent">
           <LogoMark width={80} theme="light" />
         </Link>

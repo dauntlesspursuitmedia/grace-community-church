@@ -34,5 +34,15 @@ export const headingWithSubtitle = defineType({
 				]
 			}
 		}),
+		defineField({
+			name: "textAlign",
+			type: "string",
+			title: "Text Align",
+			options: {
+				list: ["left", "center", "right"],
+				layout: "radio",
+				direction: "horizontal"
+			}
+		})
   ],
 });
