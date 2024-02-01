@@ -2,12 +2,31 @@ import { z } from "zod";
 import { cn } from "~/lib/misc";
 import { headingWithSubtitleZ } from "~/types/shared";
 
-export const HeadingWithSubtitle = ({level, className, title, subtitle, textAlign}: z.infer<typeof headingWithSubtitleZ> & {className?: string}) => {
-	console.log({title, subtitle})
+export const HeadingWithSubtitle = ({
+  level,
+  className,
+  title,
+  subtitle,
+  textAlign,
+}: z.infer<typeof headingWithSubtitleZ> & { className?: string }) => {
+  const titleLevel = {
+    h1: <h1>{title}</h1>,
+    h2: <h2>{title}</h2>,
+    h3: <h3>{title}</h3>,
+    h4: <h4>{title}</h4>,
+    h5: <h5>{title}</h5>,
+    h6: <h6>{title}</h6>,
+    DEFAULT: "h1",
+  };
   return (
-    <div style={{textAlign: textAlign ?? "left"}} className={cn("", className)}>
-      <span className="text-xs uppercase font-normal tracking-[1.2px] text-yellow">{subtitle}</span>
-      <h1 className="text-8xl font-semibold uppercase text-white">{title}</h1>
+    <div
+      style={{ textAlign: textAlign ?? "left" }}
+      className={cn("", className)}
+    >
+      <span className="text-xs uppercase font-normal tracking-[1.2px] text-yellow">
+        {subtitle}
+      </span>
+      {titleLevel[(level as keyof typeof titleLevel) || "DEFAULT"]}
     </div>
   );
 };

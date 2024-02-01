@@ -11,20 +11,21 @@ export function SanityImage(
     width: number;
     className?: string;
 		blur?:number
+		height?: number
   }
 ) {
   const { value, isInline, blur, width, height } = props;
   const { width: defaultWidth, height: defaultHeight } = getImageDimensions(value);
-	console.log({props})
   return (
     <img
-      className={`not-prose w-full object-contain ${props.className}`}
-      src={urlBuilder({dataset, projectId})
+      className={`not-prose w-full object-cover ${props.className}`}
+      src={urlBuilder({ dataset, projectId })
         .image(value)
-        .width(isInline ? 100 : (width || defaultWidth) ?? 800).height(height ?? defaultHeight)
+        .width(isInline ? 100 : (width || defaultWidth) ?? 800)
+        .height(height ?? defaultHeight)
         .fit("scale")
         .auto("format")
-				.blur(blur || 0)
+        .blur(blur || 0)
         .quality(100)
         .url()}
       alt={value.alt || ""}

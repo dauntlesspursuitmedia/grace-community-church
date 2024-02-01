@@ -36,7 +36,6 @@ export default function Index() {
 
 	const {data, loading} = useQuery<typeof heroData.data>(query, params, {initial: heroData})
 
-	console.log({data, heroData})
 
 
   if (loading || !data) {

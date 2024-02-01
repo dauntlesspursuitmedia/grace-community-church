@@ -47,7 +47,6 @@ export const textWithImageModule = defineType({
 			imagePlacement: "imagePlacement"
 		},
 		prepare: ({media, imagePlacement}) => {
-			console.log({media, imagePlacement})
 			return {
 				media,
 				title: `Text w/ Image Module - ${toTitleCase(imagePlacement)}`,

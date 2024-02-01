@@ -29,7 +29,6 @@ export const galleryModule = defineType({
 			media: "images",
 		},
 		prepare: ({ title, media }) => {
-			console.log({media})
 			return {
 				title: "Gallery Module",
 				subtitle: title,
