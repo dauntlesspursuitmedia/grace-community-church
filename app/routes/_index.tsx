@@ -1,10 +1,10 @@
-
-import { useLoaderData } from "@remix-run/react";
-import { defer, json, LoaderFunctionArgs, type MetaFunction } from "@vercel/remix";
+import { Await, useLoaderData } from "@remix-run/react";
+import { defer, LoaderFunctionArgs, type MetaFunction } from "@vercel/remix";
+import { Suspense } from "react";
 import { HeroModule } from "~/components/modules/HeroModule";
 import { useQuery } from "~/sanity/loader";
 import { loadQuery } from "~/sanity/loader.server";
-import { HOME_PAGE_QUERY } from "~/sanity/queries";
+import { HOME_PAGE_QUERY, HOME_PAGE_QUERY_WITH_TYPE } from "~/sanity/queries";
 import { HomeDocument, homeZ } from "~/types/home";
 
 export const meta: MetaFunction = () => {
@@ -14,39 +14,58 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-export const loader = async ({request}: LoaderFunctionArgs) => {
-	const {pathname} = new URL(request.url)
-	const heroData = await loadQuery<HomeDocument>(HOME_PAGE_QUERY, {}, {
-		perspective: "published"
-	}).then(res => ({
-		...res,
-		data: res ? homeZ.parse(res.data).pageLayouts.modules?.[0] : null,
-	}))
-	// const otherModules = loadQuery
-	return defer({
-		heroData: heroData,
-		params: {},
-		query: HOME_PAGE_QUERY,
-		pathname
-	})
-}
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { pathname } = new URL(request.url);
+  const otherModulesPromise = loadQuery<HomeDocument>(
+    HOME_PAGE_QUERY,
+    {},
+    {
+      perspective: "published",
+    }
+  ).then((res) => ({
+    ...res,
+    data: res ? homeZ.parse(res.data) : null,
+  }));
+  const heroData = await loadQuery<HomeDocument>(
+    HOME_PAGE_QUERY_WITH_TYPE,
+    { type: "hero" },
+    {
+      perspective: "published",
+    }
+  ).then((res) => ({
+    ...res,
+    data: res ? homeZ.parse(res.data).pageLayouts.modules?.[0] : null,
+  }));
+
+  return defer({
+    heroData: heroData,
+    params: { type: "hero" },
+    query: HOME_PAGE_QUERY_WITH_TYPE,
+    pathname,
+    otherModulesPromise,
+  });
+};
 
 export default function Index() {
-	const {heroData, pathname, query, params} = useLoaderData<typeof loader>()
+  const { heroData, query, params, otherModulesPromise } =
+    useLoaderData<typeof loader>();
 
-	const {data, loading} = useQuery<typeof heroData.data>(query, params, {initial: heroData})
-
-
+  const { data, loading } = useQuery<typeof heroData.data>(query, params, {
+    initial: heroData,
+  });
 
   if (loading || !data) {
     return <div>Loading...</div>;
   }
 
   return (
-		<>
-			<HeroModule {...data} />
-
-			<pre>{JSON.stringify(data, null, 2)}</pre>
-		</>
+    <>
+      <HeroModule {...data} />
+      <Suspense fallback="Loading page">
+        <Await resolve={otherModulesPromise}>
+          {(props) => <pre>{JSON.stringify(props, null, 2)}</pre>}
+        </Await>
+      </Suspense>
+    </>
   );
 }

@@ -1,6 +1,7 @@
-import { textWithImageModule } from "./../sanity/schema/objects/textWithImageModule";
-
+import { PortableTextBlock } from "sanity";
 import { z } from "zod";
+
+export const PortableTextZ: z.ZodType<PortableTextBlock> = z.any();
 
 export const routeStubZ = z.object({
   _id: z.string(),
@@ -17,6 +18,7 @@ export const routeStubZ = z.object({
     })
     .nullish(),
 });
+
 export const menuItemZ = z.object({
   _key: z.string(),
   _type: z.string().nullish(),
@@ -60,20 +62,22 @@ export const imagePropsZ = z.object({
       }),
     })
     .nullish(),
-		crop: z
-			.object({
-				bottom: z.number(),
-				left: z.number(),
-				right: z.number(),
-				top: z.number(),
-			})
-			.nullish(),
-		hotspot: z.object({
-			height: z.number(),
-			width: z.number(),
-			x: z.number(),
-			y: z.number(),
-		}).nullish(),
+  crop: z
+    .object({
+      bottom: z.number(),
+      left: z.number(),
+      right: z.number(),
+      top: z.number(),
+    })
+    .nullish(),
+  hotspot: z
+    .object({
+      height: z.number(),
+      width: z.number(),
+      x: z.number(),
+      y: z.number(),
+    })
+    .nullish(),
 });
 
 export const headingWithSubtitleZ = z.object({
@@ -103,7 +107,40 @@ export const actionZ = z.object({
   externalLink: z.string().nullish(),
   _key: z.string().nullish(),
 });
+export const actionGroupZ = z.object({
+  _type: z.literal("actions"),
+  actions: z.array(actionZ).nullish(),
+});
 
+export const imageWithCaptionZ = imagePropsZ.extend({
+  _type: z.literal("imageWithCaption"),
+  caption: z.string().nullish(),
+});
+
+export const eventTimeWidgetZ = z.object({
+  _type: z.literal("eventTimeWidget"),
+  _key: z.string().nullish(),
+  title: z.string().nullish(),
+  showAddress: z.boolean().default(false),
+  useDefaultServiceTimes: z.boolean().default(true),
+  eventTimes: timeArrayZ.nullish(),
+  useDefaultAddress: z.boolean().default(false),
+  eventLocation: addressZ.nullish(),
+});
+
+export const inlineGalleryZ = z.object({
+  _type: z.literal("inlineGallery"),
+  _key: z.string().nullish(),
+  images: z.array(imagePropsZ).nullish(),
+});
+
+export const uiComponentRefZ = z.object({
+  _type: z.literal("uiComponentRef"),
+  _key: z.string().nullish(),
+  name: z
+    .enum(["contactForm", "registrationForm", "recentSermons"])
+    .default("contactForm"),
+});
 export const heroModuleZ = z.object({
   _type: z.literal("hero"),
   image: imagePropsZ,
@@ -111,18 +148,44 @@ export const heroModuleZ = z.object({
   actions: z.array(actionZ).nullish(),
 });
 
+export const richTextModuleZ = z.object({
+  _type: z.literal("richText"),
+  content: z.array(PortableTextZ),
+  _key: z.string().nullish(),
+});
+
 export const columnsModuleZ = z.object({
   _type: z.literal("columnsModule"),
   columns: z
     .array(
       z.object({
+        _key: z.string().nullish(),
         _type: z.literal("column"),
-        heading: headingWithSubtitleZ.nullish(),
-        body: z.array(z.any()).nullish(),
+        items: z.array(
+          z.discriminatedUnion("_type", [
+            actionGroupZ,
+            headingWithSubtitleZ,
+            imageWithCaptionZ,
+            eventTimeWidgetZ,
+            inlineGalleryZ,
+            uiComponentRefZ,
+						richTextModuleZ
+          ])
+        ).nullish(),
       })
     )
     .nullish(),
+  titleAlign: z.enum(["left", "right", "center"]).default("left").nullish(),
+  heading: headingWithSubtitleZ.nullish(),
 });
+
+export const calloutModuleZ = z.object({
+	_type: z.literal("calloutModule"),
+	_key: z.string().nullish(),
+	backgroundColor: z.string().nullish(),
+	actions: z.array(actionZ).nullish(),
+});
+
 
 export const galleryModuleZ = z.object({
   _type: z.literal("galleryModule"),
@@ -130,12 +193,25 @@ export const galleryModuleZ = z.object({
 
 export const cardsModuleZ = z.object({
   _type: z.literal("cardsModule"),
+	heading: headingWithSubtitleZ.nullish(),
+	cards: z.array(z.object({
+		_key: z.string().nullish(),
+		_type: z.literal("ministry"),
+		title: z.string().nullish(),
+		mainImage: imagePropsZ.nullish(),
+		photoGallery: z.array(imageWithCaptionZ).nullish(),
+		description: richTextModuleZ.nullish(),
+	})).nullish(),
 });
 
 export type TextWithImageModuleProps = z.infer<typeof textWithImageModuleZ>;
 
 const textWithImageModuleZ = z.object({
   _type: z.literal("textWithImageModule"),
+	heading: headingWithSubtitleZ.nullish(),
+	imagePlacement: z.enum(["left", "right"]).default("left").nullish(),
+	image: imageWithCaptionZ.nullish(),
+	body: richTextModuleZ.nullish()
 });
 
 export const pageModulesZ = z.array(
@@ -143,8 +219,11 @@ export const pageModulesZ = z.array(
     heroModuleZ,
     cardsModuleZ,
     columnsModuleZ,
+		calloutModuleZ,
+    headingWithSubtitleZ,
     galleryModuleZ,
     textWithImageModuleZ,
+		uiComponentRefZ
   ])
 );
 

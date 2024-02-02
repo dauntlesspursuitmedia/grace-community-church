@@ -18,9 +18,8 @@ export const uiComponentRef = defineType({
       options: {
         list: [
           { title: "Contact Form", value: "contactForm" },
-          { title: "Newsletter Signup", value: "newsletterSignup" },
-					{title: "Recent Sermons", value: "recentSermons"},
-					{title: "Service Times Widget", value: "serviceTimes"},
+          { title: "Registration Form", value: "registrationForm" },
+          { title: "Recent Sermons", value: "recentSermons" },
         ],
         // layout: 'radio',
         direction: "horizontal",

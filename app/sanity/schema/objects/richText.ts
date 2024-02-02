@@ -12,12 +12,7 @@ export const richText = defineType({
       title: "Rich Text",
       type: "array",
       of: [
-				{type: "actionGroup", title: "Action Group"},
         { type: "headingWithSubtitle" },
-        { type: "imageWithCaption" },
-        { type: "eventTimeWidget" },
-				{type: "inlineGallery"},
-        { type: "uiComponentRef" },
         { type: "reference", to: { type: "person" }, name: "person" },
         { type: "reference", to: { type: "ministry" }, name: "ministry" },
         {
