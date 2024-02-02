@@ -2,6 +2,7 @@ export interface LogoProps {theme: |"dark"|"light"; width?:number}
 export const Logo = ({theme, width = 300}: LogoProps) => {
 	return (
     <svg
+		className={`fill-${theme} max-w-full`}
       width={width}
       height="100%"
       viewBox="0 0 2292 679"

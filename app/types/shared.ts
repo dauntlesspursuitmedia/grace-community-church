@@ -84,6 +84,7 @@ export const headingWithSubtitleZ = z.object({
   _type: z.literal("headingWithSubtitle"),
   title: z.string().nullish(),
   subtitle: z.string().nullish(),
+	_key: z.string().nullish(),
   level: z.string().nullish(),
   textAlign: z.enum(["left", "right", "center"]).default("left").nullish(),
 });
@@ -143,6 +144,7 @@ export const uiComponentRefZ = z.object({
 });
 export const heroModuleZ = z.object({
   _type: z.literal("hero"),
+	_key: z.string().nullish(),
   image: imagePropsZ,
   heading: headingWithSubtitleZ,
   actions: z.array(actionZ).nullish(),

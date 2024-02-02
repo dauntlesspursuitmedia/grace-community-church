@@ -22,6 +22,8 @@ export const HeadingWithSubtitle = ({
     <div
       style={{ textAlign: textAlign ?? "left" }}
       className={cn("", className)}
+			role="heading"
+			aria-level={level}
     >
       <span className="text-xs uppercase font-normal tracking-[1.2px] text-yellow">
         {subtitle}

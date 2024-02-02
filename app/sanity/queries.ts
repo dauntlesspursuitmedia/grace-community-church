@@ -34,7 +34,8 @@ const HEADING_WITH_SUBTITLE_FRAGMENT = groq`
 	subtitle,
 	_type,
 	title,
-	textAlign
+	textAlign,
+	_key
 `;
 
 export const RICH_TEXT_FRAGMENT = groq`
@@ -81,6 +82,7 @@ export const UI_COMPONENT_FRAGMENT=groq`
 `
 export const PAGE_MODULES_QUERY = groq`
 	_type,
+	_key,
 	_type == "hero" => {
 		_type,
 		_key,
@@ -247,6 +249,7 @@ export const HOME_PAGE_QUERY_WITH_TYPE = groq`
 	*[_type == "home"][0]{
 		title,
 		pageLayouts {
+
 			modules[_type match $type] {
 				${PAGE_MODULES_QUERY}
 			}

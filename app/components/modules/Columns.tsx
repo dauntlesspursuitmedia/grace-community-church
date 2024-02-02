@@ -1,4 +1,4 @@
-import groq from "groq";
+
 import { z } from "zod";
 import { columnsModuleZ } from "~/types/shared";
 
@@ -28,6 +28,7 @@ export const Columns = (props: ColumnsProps) => {
     <section
       className={`container mx-auto grid gap-8 py-16 ${gridCols[columnCount]} `}
     >
+			<h1>Columns</h1>
       {columns?.map((column) => (
         <div
           key={column?._key}
