@@ -24,28 +24,32 @@ import { SiteConfigDocument, siteConfigZ } from "./types/siteConfig";
 import { useQuery } from "./sanity/loader";
 import { Layout } from "./components/Layout";
 
+export type RootLoaderWithData = typeof loader
+
+
+
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const stegaEnabled = isStegaEnabled(request.url);
 	const {pathname} = new URL(request.url)
 	const isStudioRoute = pathname.startsWith("/studio")
 
-	if(isStudioRoute) {
-		return json({
-      sanity: {
-        isStudioRoute,
-        stegaEnabled,
-      },
-      ENV: {
-        SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID!,
-        SANITY_STUDIO_DATASET: process.env.SANITY_STUDIO_DATASET!,
-        SANITY_STUDIO_API_VERSION: process.env.SANITY_STUDIO_API_VERSION!,
-        // URL of the Frontend that will be loaded into Presentation
-        SANITY_FRONTEND_URL: frontendUrl,
-        // URL of the Studio to allow requests from Presentation
-        SANITY_STUDIO_URL: studioUrl,
-      },
-    });
-	}
+	// if(isStudioRoute) {
+	// 	return json({
+  //     sanity: {
+  //       isStudioRoute,
+  //       stegaEnabled,
+  //     },
+  //     ENV: {
+  //       SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID!,
+  //       SANITY_STUDIO_DATASET: process.env.SANITY_STUDIO_DATASET!,
+  //       SANITY_STUDIO_API_VERSION: process.env.SANITY_STUDIO_API_VERSION!,
+  //       // URL of the Frontend that will be loaded into Presentation
+  //       SANITY_FRONTEND_URL: frontendUrl,
+  //       // URL of the Studio to allow requests from Presentation
+  //       SANITY_STUDIO_URL: studioUrl,
+  //     },
+  //   });
+	// }
 	const initial = await loadQuery<SiteConfigDocument>(
 		SITE_CONFIG_QUERY,
 		{},

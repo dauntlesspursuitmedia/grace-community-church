@@ -1,11 +1,12 @@
 
 import { z } from "zod";
 import { columnsModuleZ } from "~/types/shared";
+import { Column } from "./Column";
 
 
 
 
-type ColumnsProps = z.infer<typeof columnsModuleZ>;
+export type ColumnsProps = z.infer<typeof columnsModuleZ>;
 type GridCols = typeof gridCols;
 type ColumnCount = keyof GridCols;
 const gridCols = {
@@ -16,11 +17,11 @@ const gridCols = {
 } as const;
 
 export const Columns = (props: ColumnsProps) => {
-  const { columns } = props;
+  const { columns  } = props;
   const columnCount =
-    columns?.length > 4
+    columns?.length && columns?.length > 4
       ? 4
-      : columns.length > 1
+      : columns?.length && columns.length > 1
       ? (columns.length as ColumnCount)
       : 1;
   return (
@@ -28,17 +29,10 @@ export const Columns = (props: ColumnsProps) => {
     <section
       className={`container mx-auto grid gap-8 py-16 ${gridCols[columnCount]} `}
     >
-			<h1>Columns</h1>
+			{/* <h2>Columns</h2> */}
       {columns?.map((column) => (
-        <div
-          key={column?._key}
-          className={`column mx-auto flex w-11/12 flex-col gap-4 ${
-            columnCount === 2 ? "md:max-w-lg" : ""
-          }`}
-        >
-					<pre>{JSON.stringify(column, null, 2)}</pre>
-          {/* <SanityContent value={column.body.content || []} /> */}
-        </div>
+				<Column className={`column mx-auto flex  flex-col gap-4 ${columnCount === 2 ? "lg:max-w-xl" : ""}`} key={column?._key} items={column.items} _type={"column"} />
+
       ))}
     </section>
   );

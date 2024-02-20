@@ -1,13 +1,26 @@
 import { z } from "zod";
 import { cn } from "~/lib/misc";
 import { headingWithSubtitleZ } from "~/types/shared";
+export const headingLevels = {
+  h1: 1,
+  h2: 2,
+  h3: 3,
+  h4: 4,
+  h5: 5,
+  h6: 6,
+};
 
+const alignment = {
+	left: "mr-auto",
+	center: "mx-auto",
+	right: "ml-auto",
+}
 export const HeadingWithSubtitle = ({
   level,
   className,
   title,
   subtitle,
-  textAlign,
+  textAlign = "left",
 }: z.infer<typeof headingWithSubtitleZ> & { className?: string }) => {
   const titleLevel = {
     h1: <h1>{title}</h1>,
@@ -19,16 +32,20 @@ export const HeadingWithSubtitle = ({
     DEFAULT: "h1",
   };
   return (
+		<div className="container mx-auto">
+
     <div
-      style={{ textAlign: textAlign ?? "left" }}
-      className={cn("", className)}
-			role="heading"
-			aria-level={level}
+      // style={{ textAlign: textAlign ?? "left" }}
+      className={cn("flex  flex-col w-max  max-w-md heading-w-subtitle", alignment[textAlign ?? "left"] ,className)}
+      role="heading"
+      aria-level={headingLevels[level as keyof typeof headingLevels] || 1}
+      // aria-level={level || "h1"}
     >
-      <span className="text-xs uppercase font-normal tracking-[1.2px] text-yellow">
+      <span className="text-xs inline-block text-left uppercase font-normal tracking-[1.2px] text-yellow">
         {subtitle}
       </span>
       {titleLevel[(level as keyof typeof titleLevel) || "DEFAULT"]}
     </div>
+		</div>
   );
 };

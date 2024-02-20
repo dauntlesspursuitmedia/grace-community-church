@@ -42,6 +42,8 @@ export const RICH_TEXT_FRAGMENT = groq`
 	_type == "richText" => {
 		_type,
 		content[],
+		"excerpt": array::join(string::split((pt::text(content)), "")[0..100], "") + "...",
+
 		_key
 	}
 `;
@@ -73,13 +75,13 @@ export const TIME_ARRAY_FRAGMENT = groq`
 			time
 		}
 	}
-`
+`;
 
-export const UI_COMPONENT_FRAGMENT=groq`
+export const UI_COMPONENT_FRAGMENT = groq`
 	name,
 	_type,
 	_key
-`
+`;
 export const PAGE_MODULES_QUERY = groq`
 	_type,
 	_key,
@@ -120,6 +122,7 @@ export const PAGE_MODULES_QUERY = groq`
 		heading {
 			${HEADING_WITH_SUBTITLE_FRAGMENT}
 		},
+		fullWidth,
 		cards[]-> {
 			_key,
 			_type,

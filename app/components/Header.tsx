@@ -17,7 +17,7 @@ export const Header = ({
   return (
     <header
       className={cn(
-        "py-6 px-8",
+        "py-6 px-8 z-10",
         pathname === "/" ? "fixed backdrop-blur-lg bg-transparent border-b-[1px] border-white w-full" : "bg-green-dark relative"
       )}
     >

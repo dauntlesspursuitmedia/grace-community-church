@@ -21,6 +21,13 @@ export const cardsModule = defineType({
         direction: "horizontal",
       },
     }),
+		defineField({
+			name: "fullWidth",
+			title: "Full Width",
+			type: "boolean",
+			description: "Whether to use full width of screen for card layout",
+			initialValue: false,
+		}),
     defineField({
       name: "cards",
       type: "array",

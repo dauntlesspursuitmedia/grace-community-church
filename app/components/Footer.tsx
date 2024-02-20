@@ -11,6 +11,8 @@ export const Footer = (props: SiteConfigDocument) => {
 
         <ServiceWidget
           title=""
+					wrapperClassName="my-0"
+					showAddress={true}
           _type="timeArray"
           address={props?.address}
           times={props?.services}

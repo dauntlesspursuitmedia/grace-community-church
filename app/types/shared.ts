@@ -84,7 +84,7 @@ export const headingWithSubtitleZ = z.object({
   _type: z.literal("headingWithSubtitle"),
   title: z.string().nullish(),
   subtitle: z.string().nullish(),
-	_key: z.string().nullish(),
+  _key: z.string().nullish(),
   level: z.string().nullish(),
   textAlign: z.enum(["left", "right", "center"]).default("left").nullish(),
 });
@@ -144,7 +144,7 @@ export const uiComponentRefZ = z.object({
 });
 export const heroModuleZ = z.object({
   _type: z.literal("hero"),
-	_key: z.string().nullish(),
+  _key: z.string().nullish(),
   image: imagePropsZ,
   heading: headingWithSubtitleZ,
   actions: z.array(actionZ).nullish(),
@@ -153,67 +153,69 @@ export const heroModuleZ = z.object({
 export const richTextModuleZ = z.object({
   _type: z.literal("richText"),
   content: z.array(PortableTextZ),
+	excerpt: z.string().nullish(),
   _key: z.string().nullish(),
+});
+
+export const columnZ = z.object({
+  _key: z.string().nullish(),
+  _type: z.literal("column"),
+  items: z
+    .array(
+      z.discriminatedUnion("_type", [
+        actionGroupZ,
+        headingWithSubtitleZ,
+        imageWithCaptionZ,
+        eventTimeWidgetZ,
+        inlineGalleryZ,
+        uiComponentRefZ,
+        richTextModuleZ,
+      ])
+    )
+    .nullish(),
 });
 
 export const columnsModuleZ = z.object({
   _type: z.literal("columnsModule"),
-  columns: z
-    .array(
-      z.object({
-        _key: z.string().nullish(),
-        _type: z.literal("column"),
-        items: z.array(
-          z.discriminatedUnion("_type", [
-            actionGroupZ,
-            headingWithSubtitleZ,
-            imageWithCaptionZ,
-            eventTimeWidgetZ,
-            inlineGalleryZ,
-            uiComponentRefZ,
-						richTextModuleZ
-          ])
-        ).nullish(),
-      })
-    )
-    .nullish(),
+  columns: z.array(columnZ),
   titleAlign: z.enum(["left", "right", "center"]).default("left").nullish(),
   heading: headingWithSubtitleZ.nullish(),
 });
 
 export const calloutModuleZ = z.object({
-	_type: z.literal("calloutModule"),
-	_key: z.string().nullish(),
-	backgroundColor: z.string().nullish(),
-	actions: z.array(actionZ).nullish(),
+  _type: z.literal("calloutModule"),
+  _key: z.string().nullish(),
+  backgroundColor: z.string().nullish(),
+  actions: z.array(actionZ).nullish(),
 });
-
 
 export const galleryModuleZ = z.object({
   _type: z.literal("galleryModule"),
 });
-
+export const cardZ = z.object({
+  _key: z.string().nullish(),
+  _type: z.literal("ministry"),
+  title: z.string().nullish(),
+	slug: z.string().nullish(),
+  mainImage: imagePropsZ.nullish(),
+  photoGallery: z.array(imageWithCaptionZ).nullish(),
+  description: richTextModuleZ.nullish(),
+});
 export const cardsModuleZ = z.object({
   _type: z.literal("cardsModule"),
-	heading: headingWithSubtitleZ.nullish(),
-	cards: z.array(z.object({
-		_key: z.string().nullish(),
-		_type: z.literal("ministry"),
-		title: z.string().nullish(),
-		mainImage: imagePropsZ.nullish(),
-		photoGallery: z.array(imageWithCaptionZ).nullish(),
-		description: richTextModuleZ.nullish(),
-	})).nullish(),
+  heading: headingWithSubtitleZ.nullish(),
+  fullWidth: z.boolean().default(false),
+  cards: z.array(cardZ).nullish(),
 });
 
 export type TextWithImageModuleProps = z.infer<typeof textWithImageModuleZ>;
 
 const textWithImageModuleZ = z.object({
   _type: z.literal("textWithImageModule"),
-	heading: headingWithSubtitleZ.nullish(),
-	imagePlacement: z.enum(["left", "right"]).default("left").nullish(),
-	image: imageWithCaptionZ.nullish(),
-	body: richTextModuleZ.nullish()
+  heading: headingWithSubtitleZ.nullish(),
+  imagePlacement: z.enum(["left", "right"]).default("left").nullish(),
+  image: imageWithCaptionZ.nullish(),
+  body: richTextModuleZ.nullish(),
 });
 
 export const pageModulesZ = z.array(
@@ -221,11 +223,11 @@ export const pageModulesZ = z.array(
     heroModuleZ,
     cardsModuleZ,
     columnsModuleZ,
-		calloutModuleZ,
+    calloutModuleZ,
     headingWithSubtitleZ,
     galleryModuleZ,
     textWithImageModuleZ,
-		uiComponentRefZ
+    uiComponentRefZ,
   ])
 );
 

@@ -7,6 +7,8 @@ const serviceWidgetZ = timeArrayZ.extend({
   title: z.string().nullish(),
   times: timeArrayZ.nullish(),
   address: addressZ.nullish(),
+  showAddress: z.boolean().default(false),
+	wrapperClassName: z.string().nullish(),
   theme: z.enum(["light", "dark"]).default("light"),
 });
 
@@ -16,6 +18,8 @@ export const ServiceWidget = ({
   title,
   times,
   address,
+  showAddress,
+	wrapperClassName,
   theme,
 }: ServiceWidgetProps) => {
   const urlEncodedAddress = encodeURIComponent(
@@ -28,9 +32,11 @@ export const ServiceWidget = ({
       address?.zipcode || ""
   );
   return (
-    <div>
-      <h2 className="">{title ?? ""} </h2>
-      {address && (
+    <div className={cn("text-center max-w-prose mx-auto my-12", wrapperClassName)}>
+     {title &&  <h3 className={cn(theme === "light" && "text-white", "text-black mb-6")}>
+        {title ?? ""}{" "}
+      </h3>}
+      {address && showAddress && (
         <div
           className={cn(
             "flex gap-6 items-center mb-7",
