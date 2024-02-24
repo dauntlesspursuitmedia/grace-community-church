@@ -19,7 +19,7 @@ export default {
       green: {
         DEFAULT: "#007C7C",
         dark: "#1E4141",
-        light: "##00a8a5",
+        light: "#00a8a5",
       },
       yellow: {
         DEFAULT: "#C7A700",
@@ -39,6 +39,6 @@ export default {
     },
     extend: {},
   },
-  plugins: [require("@tailwindcss/typography")],
+  plugins: [require("@tailwindcss/typography"), require("@tailwindcss/container-queries")],
 };
 

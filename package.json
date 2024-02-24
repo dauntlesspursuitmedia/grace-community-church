@@ -26,8 +26,10 @@
     "@sanity/react-loader": "^1.7.4",
     "@sanity/ui": "^2.0.0",
     "@sanity/vision": "^3.24.1",
+    "@tailwindcss/container-queries": "^0.1.1",
     "@vercel/remix": "^2.4.1",
     "clsx": "^2.1.0",
+    "framer-motion": "^11.0.5",
     "groq": "^3.24.1",
     "isbot": "^4.1.0",
     "lucide-react": "^0.311.0",
@@ -36,6 +38,7 @@
     "sanity": "^3.24.1",
     "sanity-plugin-media": "^2.2.5",
     "tailwind-merge": "^2.2.1",
+    "usehooks-ts": "^2.14.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {

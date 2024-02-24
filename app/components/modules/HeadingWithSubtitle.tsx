@@ -11,10 +11,10 @@ export const headingLevels = {
 };
 
 const alignment = {
-	left: "mr-auto",
-	center: "mx-auto",
-	right: "ml-auto",
-}
+  left: "mr-auto",
+  center: "mx-auto",
+  right: "ml-auto",
+};
 export const HeadingWithSubtitle = ({
   level,
   className,
@@ -31,21 +31,26 @@ export const HeadingWithSubtitle = ({
     h6: <h6>{title}</h6>,
     DEFAULT: "h1",
   };
+	console.log({level})
   return (
-		<div className="container mx-auto">
-
-    <div
-      // style={{ textAlign: textAlign ?? "left" }}
-      className={cn("flex  flex-col w-max  max-w-md heading-w-subtitle", alignment[textAlign ?? "left"] ,className)}
-      role="heading"
-      aria-level={headingLevels[level as keyof typeof headingLevels] || 1}
-      // aria-level={level || "h1"}
-    >
-      <span className="text-xs inline-block text-left uppercase font-normal tracking-[1.2px] text-yellow">
-        {subtitle}
-      </span>
-      {titleLevel[(level as keyof typeof titleLevel) || "DEFAULT"]}
+    <div className="container mx-auto ">
+      <div
+        // style={{ textAlign: textAlign ?? "left" }}
+        className={cn(
+          "flex text-balance flex-col w-max px-4  max-w-md heading-w-subtitle",
+          alignment[textAlign ?? "left"],
+					level === "h1" && "max-w-max w-full",
+          className
+        )}
+        role="heading"
+        aria-level={headingLevels[level as keyof typeof headingLevels] || 1}
+        // aria-level={level || "h1"}
+      >
+        <span className="text-xs inline-block text-left uppercase font-normal tracking-[1.2px] text-yellow">
+          {subtitle}
+        </span>
+        {titleLevel[(level as keyof typeof titleLevel) || "DEFAULT"]}
+      </div>
     </div>
-		</div>
   );
 };

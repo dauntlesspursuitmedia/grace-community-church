@@ -28,6 +28,18 @@ export const cardsModule = defineType({
 			description: "Whether to use full width of screen for card layout",
 			initialValue: false,
 		}),
+		defineField({
+			name: "displayType",
+			title: "Display as",
+			type: "string",
+			options: {
+				list: ["row", "list"],
+				layout: "radio",
+				direction: "horizontal",
+			},
+			description: "Row is an animating row of cards, list is a static list of cards",
+			initialValue: "row",
+		}),
     defineField({
       name: "cards",
       type: "array",

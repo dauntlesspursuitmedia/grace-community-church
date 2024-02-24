@@ -191,6 +191,8 @@ export const calloutModuleZ = z.object({
 
 export const galleryModuleZ = z.object({
   _type: z.literal("galleryModule"),
+	images: z.array(imageWithCaptionZ).nullish(),
+  heading: headingWithSubtitleZ.nullish(),
 });
 export const cardZ = z.object({
   _key: z.string().nullish(),
@@ -223,6 +225,7 @@ export const pageModulesZ = z.array(
     heroModuleZ,
     cardsModuleZ,
     columnsModuleZ,
+		richTextModuleZ,
     calloutModuleZ,
     headingWithSubtitleZ,
     galleryModuleZ,

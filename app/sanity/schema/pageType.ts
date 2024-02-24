@@ -24,7 +24,7 @@ export const page = defineType({
       },
     }),
     defineField({
-      name: "modules",
+      name: "pageLayouts",
       type: "pageModules",
       title: "Page Layouts",
 

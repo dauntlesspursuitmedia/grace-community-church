@@ -1,9 +1,8 @@
 import { z } from "zod";
 import { cardZ } from "~/types/shared";
 import { SanityImage } from "./SanityImage";
-import { PortableText } from "@portabletext/react";
 import { Link } from "@remix-run/react";
-import { ChevronsLeft, ChevronsRight } from "lucide-react";
+import {  ChevronsRight } from "lucide-react";
 
 export const Card = ({
   title,
@@ -11,7 +10,6 @@ export const Card = ({
 	slug,
   description,
 }: z.infer<typeof cardZ>) => {
-  console.log(description);
   return (
     <article className=" card  ">
       {mainImage && (

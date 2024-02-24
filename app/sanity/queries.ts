@@ -31,6 +31,7 @@ export const IMAGE_WITH_CAPTION_FRAGMENT = groq`
 `;
 const HEADING_WITH_SUBTITLE_FRAGMENT = groq`
 	level,
+
 	subtitle,
 	_type,
 	title,
@@ -41,7 +42,21 @@ const HEADING_WITH_SUBTITLE_FRAGMENT = groq`
 export const RICH_TEXT_FRAGMENT = groq`
 	_type == "richText" => {
 		_type,
-		content[],
+		content[] {
+			...,
+
+			_type == "person" => {
+				"person": @-> {
+					name,
+					title,
+					email,
+					phone,
+					bio,
+					image
+
+				}
+			}
+		},
 		"excerpt": array::join(string::split((pt::text(content)), "")[0..100], "") + "...",
 
 		_key
@@ -103,7 +118,15 @@ export const PAGE_MODULES_QUERY = groq`
 		${HEADING_WITH_SUBTITLE_FRAGMENT}
 	},
 	${RICH_TEXT_FRAGMENT},
-	_type == "galleryModule" => {},
+	_type == "galleryModule" => {
+		_type,
+		images[]{
+			${IMAGE_WITH_CAPTION_FRAGMENT}
+		},
+		heading {
+			${HEADING_WITH_SUBTITLE_FRAGMENT}
+		}
+	},
 	_type == "textWithImageModule" => {
 		heading {
 			${HEADING_WITH_SUBTITLE_FRAGMENT}
@@ -113,9 +136,7 @@ export const PAGE_MODULES_QUERY = groq`
 			${IMAGE_WITH_CAPTION_FRAGMENT}
 		},
 		body {
-			content[],
-			_key,
-			_type
+			${RICH_TEXT_FRAGMENT}
 		}
 	},
 	_type == "cardsModule" => {
@@ -165,7 +186,7 @@ export const PAGE_MODULES_QUERY = groq`
 				${RICH_TEXT_FRAGMENT},
 				_type == "inlineGallery" => {
 					images[] {
-						${IMAGE_QUERY}
+						${IMAGE_WITH_CAPTION_FRAGMENT}
 					}
 				},
 				_type == "actions" => {
@@ -243,6 +264,17 @@ export const HOME_PAGE_QUERY = groq`
 		title,
 		pageLayouts {
 			modules[_type != "hero"] {
+				${PAGE_MODULES_QUERY}
+			}
+		}
+	}
+`;
+export const PAGE_QUERY = groq`
+	*[_type == "page" && $slug == route->slug.current][0]{
+		title,
+		_type,
+		pageLayouts {
+			modules[] {
 				${PAGE_MODULES_QUERY}
 			}
 		}
