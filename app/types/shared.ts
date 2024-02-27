@@ -53,6 +53,7 @@ export const socialLinkZ = z.object({
 export const imagePropsZ = z.object({
   asset: z
     .object({
+			alt: z.string().nullish(),
       _ref: z.string().nullish(),
       _id: z.string().nullish(),
       assetId: z.string().nullish(),
@@ -206,6 +207,7 @@ export const cardZ = z.object({
 export const cardsModuleZ = z.object({
   _type: z.literal("cardsModule"),
   heading: headingWithSubtitleZ.nullish(),
+	displayType: z.enum(["row", "list"]).default("row").nullish(),
   fullWidth: z.boolean().default(false),
   cards: z.array(cardZ).nullish(),
 });

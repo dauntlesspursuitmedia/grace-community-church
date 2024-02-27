@@ -3,22 +3,28 @@ import { cardsModuleZ } from "~/types/shared";
 import { HeadingWithSubtitle } from "./HeadingWithSubtitle";
 import { cn } from "~/lib/misc";
 import { Card } from "../Card";
+import { CardRow } from "../CardRow";
+import { CardList } from "../CardList";
+
+export const CardsProps = cardsModuleZ.pick({
+  cards: true,
+  fullWidth: true,
+});
 
 export const Cards = ({
   cards,
   heading,
   fullWidth,
+  displayType,
 }: z.infer<typeof cardsModuleZ>) => {
   return (
-    <section className="flex gap-16 flex-col  mb-24">
-      {heading && <HeadingWithSubtitle className="px-8" {...heading} />}
-      <div style={{["--columns" as string]: cards?.length}}  className={cn("cards", !fullWidth && "container mx-auto px-8", )}>
-        {cards?.map((card, idx) => {
-          return (
-						<Card key={card?._key?? idx} {...card} />
-          );
-        })}
-      </div>
+    <section className="flex gap-16 flex-col ">
+      {heading?.title && <HeadingWithSubtitle className="px-8" {...heading} />}
+      {displayType === "row" ? (
+        <CardRow cards={cards} fullWidth={fullWidth} />
+      ) : (
+        <CardList cards={cards} fullWidth={fullWidth} />
+      )}
     </section>
   );
 };

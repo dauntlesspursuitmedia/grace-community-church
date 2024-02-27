@@ -144,6 +144,7 @@ export const PAGE_MODULES_QUERY = groq`
 			${HEADING_WITH_SUBTITLE_FRAGMENT}
 		},
 		fullWidth,
+		displayType,
 		cards[]-> {
 			_key,
 			_type,

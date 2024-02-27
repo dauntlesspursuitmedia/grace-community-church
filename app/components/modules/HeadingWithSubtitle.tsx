@@ -33,7 +33,7 @@ export const HeadingWithSubtitle = ({
   };
 	console.log({level})
   return (
-    <div className="container mx-auto ">
+    <div className="container mx-auto heading-w-subtitle-wrapper">
       <div
         // style={{ textAlign: textAlign ?? "left" }}
         className={cn(

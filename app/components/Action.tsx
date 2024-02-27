@@ -7,6 +7,7 @@ const buttonColor = {
   yellow:
     "first:bg-yellow first:border-0 first:hover:bg-yellow-lighter first:focus:bg-yellow-lighter hover:text-black text-white",
 		"dark-green": "bg-green-dark text-white hover:bg-green hover:text-white focus:text-white focus:bg-green focus:border-green-light",
+		black: "bg-black text-white hover:bg-black/60 hover:text-white focus:text-white  focus:bg-black/60",
 } as const;
 
 const outlineStyles = {
@@ -37,7 +38,7 @@ export const Action = ({ action }: { action: z.infer<typeof actionZ> }) => {
       to={action.internalLink?.slug ?? ""}
       prefetch="intent"
       className={cn(
-        "uppercase font-semibold tracking-[1.6px] p-4 transition-colors shadow-sm duration-150 ease-in-out hover:shadow-md",
+        "uppercase inline-block no-underline font-semibold tracking-[1.6px] p-4 transition-colors shadow-sm duration-150 ease-in-out hover:shadow-md",
         action.actionStyle?.buttonStyle === "solid"
           ? buttonColor[action.actionStyle?.color as keyof typeof buttonColor]
           : outlineStyles[

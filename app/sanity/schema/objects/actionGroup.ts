@@ -8,7 +8,7 @@ export const actionGroup = defineField({
     defineField({
       type: "array",
       name: "actions",
-			validation: (Rule) => Rule.length(2),
+			validation: (Rule) => Rule.max(2).warning("You can only have 2 actions."),
       of: [{ type: "action" }],
     }),
   ],

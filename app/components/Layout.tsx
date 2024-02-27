@@ -11,7 +11,7 @@ export const Layout = ({children, siteConfig}: LayoutProps) => {
   return (
     <>
       <Header navigation={mainNavigation} />
-      <main className="grow">{children}
+      <main className="grow main-layout">{children}
 				{/* <pre>{JSON.stringify(siteConfig, null, 2)}</pre> */}
 			</main>
       <Footer {...rest} />

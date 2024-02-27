@@ -40,14 +40,7 @@ export const lookup = {
       default: HeadingWithSubtitle,
     };
   }),
-	imageWithCaption: lazy(async () => {
-		const { ImageWithCaption } = await import(
-      "~/components/modules/ImageWithCaption"
-    );
-    return {
-      default: ImageWithCaption,
-    };
-  }),
+
 	richText: lazy(async () => {
 		const { RichText } = await import("~/components/modules/RichText");
 		return {

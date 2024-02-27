@@ -1,5 +1,4 @@
 import { useRouteLoaderData } from "@remix-run/react";
-import { Clock10, MapPinned } from "lucide-react";
 import { z } from "zod";
 import { RootLoaderWithData } from "~/root";
 import { eventTimeWidgetZ } from "~/types/shared";

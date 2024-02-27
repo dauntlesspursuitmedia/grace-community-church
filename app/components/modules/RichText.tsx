@@ -3,7 +3,7 @@ import { z } from "zod";
 import { richTextModuleZ } from "~/types/shared";
 
 export const RichText = ({content, _key}: z.infer<typeof richTextModuleZ>) => {
-  return <div className="container px-4 rich-text mx-auto prose ">
+  return <div className="container px-4 rich-text mx-auto prose mb-24">
 		<PortableText components={{
 				block: {
 					normal: ({children}) => <p className="max-w-prose">{children}</p>

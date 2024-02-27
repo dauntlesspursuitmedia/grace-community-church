@@ -203,7 +203,9 @@
 		}
 	}
 
-
+	.main-layout > .heading-w-subtitle-wrapper {
+		@apply my-16;
+	}
 }
 
 
