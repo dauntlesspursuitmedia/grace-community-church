@@ -10,14 +10,14 @@ import { useCycle, useMotionValueEvent, useScroll } from "framer-motion";
  */
 export const Header = ({
   navigation,
+	webcastInProgress,
 }: {
   navigation: SiteConfigDocument["mainNavigation"];
+	webcastInProgress?: boolean;
 }) => {
   const { pathname } = useLocation();
 	const [x, cycleX]= useCycle(0,100)
  const { scrollY} = useScroll()
-
- console.log("Cycle X: ", x)
 
  useMotionValueEvent(scrollY, "change", (latest) => {
 
@@ -26,9 +26,7 @@ export const Header = ({
 	} else {
 		cycleX(0)
 	}
-	console.log("Page Scroll: ", latest)
  })
-
 
   return (
     <header
@@ -67,9 +65,10 @@ export const Header = ({
         </nav>
         <Link
           prefetch="intent"
-          className="p-4 border-white border-[1px] text-white uppercase tracking-[1.6px] hover:bg-green hover:border-green transition-colors shadow-sm duration-150 ease-in-out hover:shadow-md"
+          className="p-4 border-white border-[1px] text-white uppercase tracking-[1.6px] hover:bg-green hover:border-green transition-colors shadow-sm duration-150 ease-in-out hover:shadow-md flex items-center gap-2"
           to="livestream"
         >
+					{webcastInProgress && <span className="size-2 inline-block rounded-full animate-pulse duration-100 bg-[#ff2455]"></span>}
           Livestream
         </Link>
       </div>

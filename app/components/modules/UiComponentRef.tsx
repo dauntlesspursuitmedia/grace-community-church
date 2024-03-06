@@ -1,3 +1,5 @@
+import { ContactForm } from "../ContactForm";
+
 export const UiComponentRef = ({ name }: { name: string }) => {
-  return <div>UiComponentRef {name}</div>;
+  return <ContactForm />
 };

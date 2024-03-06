@@ -53,7 +53,7 @@ export const socialLinkZ = z.object({
 export const imagePropsZ = z.object({
   asset: z
     .object({
-			alt: z.string().nullish(),
+      alt: z.string().nullish(),
       _ref: z.string().nullish(),
       _id: z.string().nullish(),
       assetId: z.string().nullish(),
@@ -154,7 +154,7 @@ export const heroModuleZ = z.object({
 export const richTextModuleZ = z.object({
   _type: z.literal("richText"),
   content: z.array(PortableTextZ),
-	excerpt: z.string().nullish(),
+  excerpt: z.string().nullish(),
   _key: z.string().nullish(),
 });
 
@@ -186,20 +186,21 @@ export const columnsModuleZ = z.object({
 export const calloutModuleZ = z.object({
   _type: z.literal("calloutModule"),
   _key: z.string().nullish(),
+  body: z.string().nullish(),
   backgroundColor: z.string().nullish(),
-  actions: z.array(actionZ).nullish(),
+  actions: z.object({ actions: z.array(actionZ).nullish() }).nullish(),
 });
 
 export const galleryModuleZ = z.object({
   _type: z.literal("galleryModule"),
-	images: z.array(imageWithCaptionZ).nullish(),
+  images: z.array(imageWithCaptionZ).nullish(),
   heading: headingWithSubtitleZ.nullish(),
 });
 export const cardZ = z.object({
   _key: z.string().nullish(),
   _type: z.literal("ministry"),
   title: z.string().nullish(),
-	slug: z.string().nullish(),
+  slug: z.string().nullish(),
   mainImage: imagePropsZ.nullish(),
   photoGallery: z.array(imageWithCaptionZ).nullish(),
   description: richTextModuleZ.nullish(),
@@ -207,7 +208,7 @@ export const cardZ = z.object({
 export const cardsModuleZ = z.object({
   _type: z.literal("cardsModule"),
   heading: headingWithSubtitleZ.nullish(),
-	displayType: z.enum(["row", "list"]).default("row").nullish(),
+  displayType: z.enum(["row", "list"]).default("row").nullish(),
   fullWidth: z.boolean().default(false),
   cards: z.array(cardZ).nullish(),
 });
@@ -227,7 +228,7 @@ export const pageModulesZ = z.array(
     heroModuleZ,
     cardsModuleZ,
     columnsModuleZ,
-		richTextModuleZ,
+    richTextModuleZ,
     calloutModuleZ,
     headingWithSubtitleZ,
     galleryModuleZ,

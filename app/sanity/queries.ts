@@ -165,8 +165,10 @@ export const PAGE_MODULES_QUERY = groq`
 	_type == "calloutModule" => {
 		backgroundColor,
 		body,
-		actions[] {
-			${ACTION_FRAGMENT}
+		actions{
+			actions[] {
+				${ACTION_FRAGMENT}
+			}
 		}
 	},
 	_type == "columnsModule" => {

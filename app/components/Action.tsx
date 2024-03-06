@@ -8,6 +8,7 @@ const buttonColor = {
     "first:bg-yellow first:border-0 first:hover:bg-yellow-lighter first:focus:bg-yellow-lighter hover:text-black text-white",
 		"dark-green": "bg-green-dark text-white hover:bg-green hover:text-white focus:text-white focus:bg-green focus:border-green-light",
 		black: "bg-black text-white hover:bg-black/60 hover:text-white focus:text-white  focus:bg-black/60",
+		green: "bg-green-dark"
 } as const;
 
 const outlineStyles = {

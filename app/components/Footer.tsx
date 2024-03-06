@@ -5,7 +5,7 @@ import { LatestSermonsList } from "./LatestSermons";
 
 export const Footer = (props: SiteConfigDocument) => {
   return (
-    <footer className="bg-green-dark px-8">
+    <footer className="bg-green-dark px-8 mt-24">
       <div className="container py-16 mx-auto relative flex justify-between items-start gap-16 flex-wrap ">
         <Logo theme="light"  width={450} />
 

@@ -3,18 +3,26 @@ import { Footer } from "./Footer";
 import { Header } from "./Header";
 import type { SiteConfigDocument } from "~/types/siteConfig";
 
-export type LayoutProps = PropsWithChildren<
-{siteConfig?: SiteConfigDocument}>
+export type LayoutProps = PropsWithChildren<{
+  siteConfig?: SiteConfigDocument;
+  webcastInProgress?: boolean;
+}>;
 
-export const Layout = ({children, siteConfig}: LayoutProps) => {
-	const {mainNavigation, ...rest} = siteConfig || {};
+export const Layout = ({
+  children,
+  siteConfig,
+  webcastInProgress,
+}: LayoutProps) => {
+  const { mainNavigation, ...rest } = siteConfig || {};
   return (
     <>
-      <Header navigation={mainNavigation} />
-      <main className="grow main-layout">{children}
-				{/* <pre>{JSON.stringify(siteConfig, null, 2)}</pre> */}
-			</main>
+      <Header webcastInProgress={webcastInProgress} navigation={mainNavigation} />
+      <main className="grow main-layout">
+        {children}
+        {/* <pre>{JSON.stringify(siteConfig, null, 2)}</pre> */}
+      </main>
       <Footer {...rest} />
+
     </>
   );
 };

@@ -32,24 +32,17 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const stegaEnabled = isStegaEnabled(request.url);
 	const {pathname} = new URL(request.url)
 	const isStudioRoute = pathname.startsWith("/studio")
+	const SERMON_AUDIO_BASE_URL = process.env.SERMON_AUDIO_BASE_URL!
+	const SERMON_AUDIO_BROADCAST_ID = process.env.SERMON_AUDIO_BROADCAST_ID!
 
-	// if(isStudioRoute) {
-	// 	return json({
-  //     sanity: {
-  //       isStudioRoute,
-  //       stegaEnabled,
-  //     },
-  //     ENV: {
-  //       SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID!,
-  //       SANITY_STUDIO_DATASET: process.env.SANITY_STUDIO_DATASET!,
-  //       SANITY_STUDIO_API_VERSION: process.env.SANITY_STUDIO_API_VERSION!,
-  //       // URL of the Frontend that will be loaded into Presentation
-  //       SANITY_FRONTEND_URL: frontendUrl,
-  //       // URL of the Studio to allow requests from Presentation
-  //       SANITY_STUDIO_URL: studioUrl,
-  //     },
-  //   });
-	// }
+	const webcastInProgress: boolean = await fetch(`${SERMON_AUDIO_BASE_URL}/v2/node/broadcasters/${SERMON_AUDIO_BROADCAST_ID}`, {
+		headers: {
+			"X-Api-Key": process.env.SERMON_AUDIO_API_KEY!,
+		}
+	}).then(res => res.json()).then(res => res.webcastInProgress).catch(err => console.log(err))
+
+	console.log({webcastInProgress})
+
 	const initial = await loadQuery<SiteConfigDocument>(
 		SITE_CONFIG_QUERY,
 		{},
@@ -64,7 +57,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
 
 
+
   return json({
+		webcastInProgress,
 		initial,
 		query: SITE_CONFIG_QUERY,
 		params: {},
@@ -85,7 +80,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function App() {
-  const { sanity, ENV, initial, query, params } =
+  const { sanity,webcastInProgress, ENV, initial, query, params } =
     useLoaderData<typeof loader>();
 
   const { data, loading } = useQuery<typeof initial.data>(query, params, {
@@ -107,7 +102,7 @@ export default function App() {
           <Outlet />
         ) : (
           <>
-            <Layout siteConfig={loading || !data ? initial.data : data}>
+            <Layout webcastInProgress={webcastInProgress} siteConfig={loading || !data ? initial.data : data}>
               <Outlet />
             </Layout>
           </>
