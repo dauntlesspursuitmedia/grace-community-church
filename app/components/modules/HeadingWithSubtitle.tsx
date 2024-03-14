@@ -31,7 +31,6 @@ export const HeadingWithSubtitle = ({
     h6: <h6>{title}</h6>,
     DEFAULT: "h1",
   };
-	console.log({level})
   return (
     <div className="container mx-auto heading-w-subtitle-wrapper">
       <div
