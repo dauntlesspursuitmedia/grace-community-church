@@ -51,7 +51,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     .then((res) => res.webcastInProgress)
     .catch((err) => console.log(err));
 
-  console.log({ webcastInProgress });
 
   const initial = await loadQuery<SiteConfigDocument>(
     SITE_CONFIG_QUERY,

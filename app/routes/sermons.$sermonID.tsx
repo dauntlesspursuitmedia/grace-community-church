@@ -39,19 +39,8 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 export default function SermonIDRoute() {
   const { sermon } = useLoaderData<typeof loader>();
 
-  const videoStreamUrls = sermon?.media?.video?.map(
-    (video) => video?.streamURL
-  );
-  const audioStreamUrls = sermon?.media?.audio?.map(
-    (audio) => audio?.streamURL
-  );
-  console.log({
-    videoStreamUrls,
-    audioStreamUrls,
-    thumbnail: sermon?.media?.video?.find(
-      (video) => video?.thumbnailImageURL !== null
-    )?.thumbnailImageURL,
-  });
+
+
   const formattedDate = new Intl.DateTimeFormat("en-US", {
     dateStyle: "medium",
   }).format(new Date(sermon?.preachDate));
