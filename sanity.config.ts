@@ -2,7 +2,7 @@ import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
 import { frontendUrl, projectDetails } from '~/sanity/projectDetails'
-import { presentationTool } from '@sanity/presentation'
+// import { presentationTool } from '@sanity/presentation'
 import { locate } from '~/sanity/presentation/locate'
 import schema from '~/sanity/schema'
 import { structure } from '~/sanity/structure'
@@ -21,7 +21,7 @@ export const config = defineConfig({
     structureTool({structure: structure}),
     visionTool(),
 		media(),
-    presentationTool({ previewUrl: frontendUrl, locate }),
+    // presentationTool({ previewUrl: frontendUrl, locate }),
   ],
   basePath: "/studio",
   schema: {

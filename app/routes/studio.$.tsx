@@ -3,7 +3,7 @@ import { Studio } from "sanity";
 import { config } from "sanity.config";
 
 import { Hydrated } from "~/components/Hydrated";
-import  '~/styles/studio.css'
+import  '~/styles/studio.css?url'
 
 export const meta:MetaFunction = () => [
 	{title: "Studio | Grace Community Church"},

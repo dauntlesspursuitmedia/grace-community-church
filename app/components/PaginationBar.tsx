@@ -1,14 +1,18 @@
 import { Link, useSearchParams } from "@remix-run/react";
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 import { cn } from "~/lib/misc";
-import { setSearchParamsString } from "~/routes/sermons";
 
-export const PaginationBar = ({ totalCount }: {totalCount: number}) => {
+export const PaginationBar = ({ totalCount }: { totalCount: number }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const $pageNumber = Number(searchParams.get("pageNumber")) || 10;
   const $top = Number(searchParams.get("top")) || 10;
   const totalPages = Math.ceil(totalCount / $top);
-  const currentPage = $pageNumber
+  const currentPage = $pageNumber;
   const maxPages = 7;
   const halfMaxPages = Math.floor(maxPages / 2);
   const canPageBackwards = $pageNumber > 0;
@@ -34,7 +38,7 @@ export const PaginationBar = ({ totalCount }: {totalCount: number}) => {
     }
   }
 
-	console.log({pageNumbers, totalPages, currentPage})
+  console.log({ pageNumbers, totalPages, currentPage });
   return (
     <div className="flex items-center gap-1">
       <Link
@@ -44,8 +48,8 @@ export const PaginationBar = ({ totalCount }: {totalCount: number}) => {
         preventScrollReset
         prefetch="intent"
         className={cn(
-          !canPageBackwards && "pointer-events-none opacity-50",
-          "text-neutral-600"
+          !canPageBackwards && "pointer-events-none opacity-50 ",
+          "text-green inline-flex items-center justify-center text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50  border border-green-dark bg-cream hover:bg-green-light hover:text-cream  h-8 rounded-md px-2 "
         )}
       >
         <span className="sr-only"> First page</span>
@@ -57,7 +61,9 @@ export const PaginationBar = ({ totalCount }: {totalCount: number}) => {
         }}
         preventScrollReset
         prefetch="intent"
-        className="text-neutral-600"
+        className={cn(
+          "text-green inline-flex items-center justify-center text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50  border border-green-dark bg-cream hover:bg-green-light hover:text-cream  h-8 rounded-md px-2 "
+        )}
       >
         <span className="sr-only"> Previous page</span>
         <ChevronLeft />
@@ -69,7 +75,9 @@ export const PaginationBar = ({ totalCount }: {totalCount: number}) => {
           return (
             <div
               key={`${pageNumber}-active`}
-              className="grid min-w-[2rem] place-items-center bg-green-dark text-sm text-black"
+              className={cn(
+                "items-center justify-center font-medium ring-offset-cream transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-light focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50  hover:bg-green/10 hover:text-green-dark h-8 rounded-md px-2 grid min-w-[2rem] place-items-center bg-green/50 text-sm text-black"
+              )}
             >
               <span className="sr-only">Page {pageNumber}</span>
               <span>{pageNumber}</span>
@@ -84,7 +92,9 @@ export const PaginationBar = ({ totalCount }: {totalCount: number}) => {
               }}
               preventScrollReset
               prefetch="intent"
-              className="min-w-[2rem] font-normal text-neutral-600"
+              className={cn(
+                "inline-flex items-center justify-center text-sm ring-offset-cream transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-light focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50  hover:bg-green/10 hover:text-green-dark   h-8 rounded-md px-2 min-w-[2rem] font-normal text-gray"
+              )}
             >
               {pageNumber}
             </Link>
@@ -100,7 +110,9 @@ export const PaginationBar = ({ totalCount }: {totalCount: number}) => {
         }}
         preventScrollReset
         prefetch="intent"
-        className="text-neutral-600"
+        className={cn(
+          "text-green inline-flex items-center justify-center text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50  border border-green-dark bg-cream hover:bg-green-light hover:text-cream  h-8 rounded-md px-2 "
+        )}
       >
         <span className="sr-only"> Next page</span>
         <ChevronRight />
@@ -112,7 +124,9 @@ export const PaginationBar = ({ totalCount }: {totalCount: number}) => {
         }}
         preventScrollReset
         prefetch="intent"
-        className="text-neutral-600"
+        className={cn(
+          "text-green inline-flex items-center justify-center text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50  border border-green-dark bg-cream hover:bg-green-light hover:text-cream  h-8 rounded-md px-2 "
+        )}
       >
         <span className="sr-only"> Last page</span>
         <ChevronsRight />

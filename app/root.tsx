@@ -1,4 +1,3 @@
-
 import {
   Links,
   LiveReload,
@@ -9,8 +8,8 @@ import {
   useLoaderData,
 } from "@remix-run/react";
 import { LoaderFunctionArgs, json } from "@vercel/remix";
-import "@fontsource-variable/dm-sans/standard.css"
-import "~/styles/tailwind.css";
+import font from "@fontsource-variable/dm-sans/standard.css?url";
+import styles from "~/styles/tailwind.css?url";
 import {
   frontendUrl,
   isStegaEnabled,
@@ -24,45 +23,52 @@ import { SiteConfigDocument, siteConfigZ } from "./types/siteConfig";
 import { useQuery } from "./sanity/loader";
 import { Layout } from "./components/Layout";
 
-export type RootLoaderWithData = typeof loader
+export type RootLoaderWithData = typeof loader;
 
-
+export const links = () => {
+  return [
+    { rel: "stylesheet", href: styles },
+    { rel: "stylesheet", href: font },
+  ];
+};
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const stegaEnabled = isStegaEnabled(request.url);
-	const {pathname} = new URL(request.url)
-	const isStudioRoute = pathname.startsWith("/studio")
-	const SERMON_AUDIO_BASE_URL = process.env.SERMON_AUDIO_BASE_URL!
-	const SERMON_AUDIO_BROADCAST_ID = process.env.SERMON_AUDIO_BROADCAST_ID!
+  const { pathname } = new URL(request.url);
+  const isStudioRoute = pathname.startsWith("/studio");
+  const SERMON_AUDIO_BASE_URL = process.env.SERMON_AUDIO_BASE_URL!;
+  const SERMON_AUDIO_BROADCAST_ID = process.env.SERMON_AUDIO_BROADCAST_ID!;
 
-	const webcastInProgress: boolean = await fetch(`${SERMON_AUDIO_BASE_URL}/v2/node/broadcasters/${SERMON_AUDIO_BROADCAST_ID}`, {
-		headers: {
-			"X-Api-Key": process.env.SERMON_AUDIO_API_KEY!,
-		}
-	}).then(res => res.json()).then(res => res.webcastInProgress).catch(err => console.log(err))
+  const webcastInProgress: boolean = await fetch(
+    `${SERMON_AUDIO_BASE_URL}/v2/node/broadcasters/${SERMON_AUDIO_BROADCAST_ID}`,
+    {
+      headers: {
+        "X-Api-Key": process.env.SERMON_AUDIO_API_KEY!,
+      },
+    }
+  )
+    .then((res) => res.json())
+    .then((res) => res.webcastInProgress)
+    .catch((err) => console.log(err));
 
-	console.log({webcastInProgress})
+  console.log({ webcastInProgress });
 
-	const initial = await loadQuery<SiteConfigDocument>(
-		SITE_CONFIG_QUERY,
-		{},
-		{
-			perspective: stegaEnabled ? "previewDrafts": "published",
-		}
-	).then(res => ({
-		...res,
-		data: res.data ? siteConfigZ.parse(res.data) : undefined,
-	}))
-
-
-
-
+  const initial = await loadQuery<SiteConfigDocument>(
+    SITE_CONFIG_QUERY,
+    {},
+    {
+      perspective: stegaEnabled ? "previewDrafts" : "published",
+    }
+  ).then((res) => ({
+    ...res,
+    data: res.data ? siteConfigZ.parse(res.data) : undefined,
+  }));
 
   return json({
-		webcastInProgress,
-		initial,
-		query: SITE_CONFIG_QUERY,
-		params: {},
+    webcastInProgress,
+    initial,
+    query: SITE_CONFIG_QUERY,
+    params: {},
     sanity: {
       isStudioRoute,
       stegaEnabled,
@@ -80,14 +86,12 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function App() {
-  const { sanity,webcastInProgress, ENV, initial, query, params } =
+  const { sanity, webcastInProgress, ENV, initial, query, params } =
     useLoaderData<typeof loader>();
 
   const { data, loading } = useQuery<typeof initial.data>(query, params, {
-    initial
+    initial,
   });
-
-
 
   return (
     <html lang="en">
@@ -102,7 +106,10 @@ export default function App() {
           <Outlet />
         ) : (
           <>
-            <Layout webcastInProgress={webcastInProgress} siteConfig={loading || !data ? initial.data : data}>
+            <Layout
+              webcastInProgress={webcastInProgress}
+              siteConfig={loading || !data ? initial.data : data}
+            >
               <Outlet />
             </Layout>
           </>
@@ -115,7 +122,6 @@ export default function App() {
           }}
         />
         <Scripts />
-        <LiveReload />
         {!sanity.isStudioRoute && sanity.stegaEnabled ? (
           <Suspense>
             <VisualEditing studioUrl={ENV.SANITY_STUDIO_URL} />
