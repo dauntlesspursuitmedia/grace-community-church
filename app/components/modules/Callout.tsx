@@ -8,7 +8,6 @@ export const Callout = ({
   actions,
   body,
 }: z.infer<typeof calloutModuleZ>) => {
-  console.log({ backgroundColor, actions, body });
   return (
     <section
       className={cn(

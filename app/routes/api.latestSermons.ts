@@ -27,7 +27,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 		return json("No data found", {status: 404})
 	}
 
-  // console.log({ data });
 
   return json(data);
 };

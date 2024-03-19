@@ -22,6 +22,7 @@ import { loadQuery } from "./sanity/loader.server";
 import { SiteConfigDocument, siteConfigZ } from "./types/siteConfig";
 import { useQuery } from "./sanity/loader";
 import { Layout } from "./components/Layout";
+import { useScrollLock } from "usehooks-ts";
 
 export type RootLoaderWithData = typeof loader;
 
@@ -50,7 +51,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     .then((res) => res.json())
     .then((res) => res.webcastInProgress)
     .catch((err) => console.log(err));
-
 
   const initial = await loadQuery<SiteConfigDocument>(
     SITE_CONFIG_QUERY,
@@ -88,6 +88,7 @@ export default function App() {
   const { sanity, webcastInProgress, ENV, initial, query, params } =
     useLoaderData<typeof loader>();
 
+
   const { data, loading } = useQuery<typeof initial.data>(query, params, {
     initial,
   });
@@ -100,7 +101,10 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body className="bg-cream font-sans flex flex-col min-h-dvh">
+      <body
+        id="scrollable"
+        className="bg-cream font-sans flex flex-col min-h-dvh"
+      >
         {sanity.isStudioRoute ? (
           <Outlet />
         ) : (

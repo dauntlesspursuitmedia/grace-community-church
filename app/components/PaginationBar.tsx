@@ -38,7 +38,6 @@ export const PaginationBar = ({ totalCount }: { totalCount: number }) => {
     }
   }
 
-  console.log({ pageNumbers, totalPages, currentPage });
   return (
     <div className="flex items-center gap-1">
       <Link
