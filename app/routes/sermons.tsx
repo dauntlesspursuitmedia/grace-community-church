@@ -5,12 +5,22 @@ import {
   useLoaderData,
   useLocation,
 } from "@remix-run/react";
-import { LoaderFunctionArgs, json } from "@vercel/remix";
-import { CameraOff } from "lucide-react";
-import { useLocale } from "sanity";
+import { LoaderFunctionArgs, MetaFunction, json } from "@vercel/remix";
 import { SeriesList, SermonList } from "types";
-import { PaginationBar } from "~/components/PaginationBar";
 import { cn } from "~/lib/misc";
+
+export const meta: MetaFunction = () => {
+	return [
+    {
+      title: "Sermons | Grace Community Church",
+    },
+    {
+      name: "description",
+      content:
+        "Discover inspiring and insightful sermons from Grace Community Church. Explore our collection of biblical teachings that will strengthen your faith and help you grow spiritually.",
+    },
+  ];
+}
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const BROADCASTER_ID = process.env.SERMON_AUDIO_BROADCAST_ID!;

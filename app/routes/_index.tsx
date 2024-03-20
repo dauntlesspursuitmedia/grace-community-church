@@ -3,19 +3,36 @@ import { defer, LoaderFunctionArgs, type MetaFunction } from "@vercel/remix";
 import { Suspense } from "react";
 import { Page } from "~/components/Page";
 import { HeroModule } from "~/components/modules/HeroModule";
+import { urlFor } from "~/lib/urlFor";
 import { useQuery } from "~/sanity/loader";
 import { loadQuery } from "~/sanity/loader.server";
 import { HOME_PAGE_QUERY, HOME_PAGE_QUERY_WITH_TYPE } from "~/sanity/queries";
 import { HomeDocument, homeZ } from "~/types/home";
 import { PageDocument } from "~/types/page";
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
+export const meta: MetaFunction<typeof loader> = ({
+  data,
+  matches,
+  location,
+}) => {
+	const routeData = matches.find((match) => match.id === "routes/_index")
+  const rootData = matches.find((match) => match.id === "root")?.data?.initial
+
+
+	return [
+		{ title: `Welcome Home | ${rootData?.data?.title} ` },
+    {
+			name: "description",
+      content:
+			"Welcome to Grace Community Church, a reformed baptist church dedicated to glorifying God and proclaiming the gospel of Jesus Christ. Discover a loving community committed to biblical truth, spiritual growth, and serving others. Join us for engaging worship services, sound biblical teaching, and opportunities to connect and grow in your faith.",
+    },
+		{
+			tagName: "link",
+			rel: "canonical",
+			href: rootData?.data?.url + location.pathname || "",
+		},
   ];
 };
-
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { pathname } = new URL(request.url);
   const otherModulesPromise = loadQuery<HomeDocument>(

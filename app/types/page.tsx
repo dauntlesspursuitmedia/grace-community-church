@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { pageModulesZ } from "./shared";
+import { pageModulesZ, routeStubZ } from "./shared";
 
 export const pageZ = z.object({
 	_type: z.literal("page"),
+	route: routeStubZ.nullish(),
 	pageLayouts: z.object({modules: pageModulesZ.nullish(),})
 })
 

@@ -1,11 +1,19 @@
-import { NavLink, Outlet, useLoaderData, useParams } from "@remix-run/react";
-import { LoaderFunctionArgs, json } from "@vercel/remix";
+import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import { LoaderFunctionArgs, MetaFunction, json } from "@vercel/remix";
 import invariant from "tiny-invariant";
 import { Sermon } from "types";
-import ReactPlayer from "react-player";
 import { HeadingWithSubtitle } from "~/components/modules/HeadingWithSubtitle";
 import { cn } from "~/lib/misc";
 import { ChevronLeft } from "lucide-react";
+
+export const meta: MetaFunction<typeof loader> = ({data, matches}) => {
+	const root = matches.find((match) => match.id === "root")?.data?.initial;
+	console.log(data?.sermon)
+	return [
+		{title: `${data?.sermon?.fullTitle} | ${root?.data?.title} `},
+		{name: "description", content: `${data?.sermon?.displayEventType} - ${data?.sermon?.preachDate} - Series: ${data?.sermon?.subtitle}` }
+	]
+}
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   invariant(params.sermonID, "sermonID parameter is required");

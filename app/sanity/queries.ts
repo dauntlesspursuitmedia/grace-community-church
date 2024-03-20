@@ -98,6 +98,7 @@ export const UI_COMPONENT_FRAGMENT = groq`
 	_key
 `;
 export const PAGE_MODULES_QUERY = groq`
+
 	_type,
 	_key,
 	_type == "hero" => {
@@ -276,6 +277,20 @@ export const PAGE_QUERY = groq`
 	*[_type == "page" && $slug == route->slug.current][0]{
 		title,
 		_type,
+			route-> {
+		_id,
+		title,
+		"slug": slug.current,
+		seo {
+			metaTitle,
+			metaDescription,
+			ogTitle,
+			ogDescription,
+			ogImage {
+				${IMAGE_QUERY}
+			}
+		}
+	},
 		pageLayouts {
 			modules[] {
 				${PAGE_MODULES_QUERY}
@@ -286,6 +301,7 @@ export const PAGE_QUERY = groq`
 export const HOME_PAGE_QUERY_WITH_TYPE = groq`
 	*[_type == "home"][0]{
 		title,
+
 		pageLayouts {
 
 			modules[_type match $type] {
