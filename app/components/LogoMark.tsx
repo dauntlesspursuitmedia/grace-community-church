@@ -1,10 +1,11 @@
 import { LogoProps } from "./Logo";
 
-export const LogoMark = ({ theme, width = 300 }: LogoProps) => {
+export const LogoMark = ({ theme, width = 300, className="" }: LogoProps) => {
   return (
     <svg
       width={width}
       height="100%"
+			className={className}
       viewBox="0 0 510 598"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"

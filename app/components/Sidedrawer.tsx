@@ -81,7 +81,7 @@ export const SidedrawerNavigation = ({
           const { item, itemName, externalLink, _key, nestedRoutes } = navItem;
           return (
             <motion.li
-              className="space-between relative mb-2  flex-wrap"
+              className="space-between relative flex-wrap"
               variants={liVariants}
               key={_key}
             >
@@ -111,24 +111,30 @@ export const SidedrawerNavigation = ({
                 </NavLink>
               )}
               {nestedRoutes && (
-                <ul className="relative ml-8 ">
+                <ul className="relative flex flex-col gap-4s ml-8 my-6 bg-cream/40">
                   {nestedRoutes.map((nestedItem) => (
                     <li className="divide-y py-2" key={nestedItem?._key}>
                       {nestedItem?.externalLink ? (
                         <a
-                          // onClick={() => toggleOpen()}
+                          target="_blank"
+                          onClick={() => handleMenuClose()}
+                          className={cn(
+                            `link-focus flex  items-center rounded-xl pl-2 text-green-dark uppercase hover:text-green `
+                          )}
                           href={nestedItem?.externalLink || ``}
+                          rel="noreferrer"
                         >
-                          test
+                          {nestedItem?.item?.title || nestedItem?.itemName}
                         </a>
                       ) : (
                         <NavLink
                           prefetch="intent"
-                          // onClick={() => toggleOpen()}
+                          onClick={() => handleMenuClose()}
                           className={({ isActive }) =>
-                            isActive
-                              ? `primary-navigation--active`
-                              : `link-focus flex  items-center rounded-xl px-2 text-blue-500 hover:text-red-500 dark:text-red-400	dark:hover:text-red-700`
+                            cn(
+                              `link-focus flex  items-center rounded-xl pl-2 text-green-dark uppercase hover:text-green `,
+                              isActive && "primary-navigation--active"
+                            )
                           }
                           to={`${
                             item?.slug !== `` &&

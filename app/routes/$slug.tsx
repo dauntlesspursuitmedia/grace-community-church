@@ -1,4 +1,4 @@
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, useOutletContext } from "@remix-run/react";
 import { LoaderFunctionArgs, json } from "@vercel/remix";
 import { Page } from "~/components/Page";
 import { useQuery } from "~/sanity/loader";

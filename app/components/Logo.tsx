@@ -1,4 +1,4 @@
-export interface LogoProps {theme: |"dark"|"light"; width?:number}
+export interface LogoProps {theme: |"dark"|"light"; width?:number; className?: string;}
 export const Logo = ({theme, width = 300}: LogoProps) => {
 	return (
     <svg

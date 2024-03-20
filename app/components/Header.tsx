@@ -1,18 +1,21 @@
 import { SiteConfigDocument } from "~/types/siteConfig";
 import { LogoMark } from "./LogoMark";
-import { Link, NavLink, useLocation } from "@remix-run/react";
+import { Link, NavLink, useLocation, useOutletContext } from "@remix-run/react";
+
 import { cn } from "~/lib/misc";
 import {
   AnimatePresence,
   useCycle,
-	motion,
+  motion,
   useMotionValueEvent,
   useScroll,
 } from "framer-motion";
 import { useWindowSize } from "usehooks-ts";
-import { useState } from "react";
 import { SidedrawerNavigation } from "./Sidedrawer";
 import { Menu } from "lucide-react";
+import { DropdownMenu } from "./menus/DropdownMenu";
+import { DropdownState } from "~/root";
+import { useState } from "react";
 /**
  * Header component that renders the site header.
  * @param navigation - The main site navigation links
@@ -28,18 +31,21 @@ export const Header = ({
   const [x, cycleX] = useCycle(0, 100);
   const { scrollY } = useScroll();
   const { width = 0 } = useWindowSize();
-  const [dropdownState, setDropdownState] = useState<"open" | "closed">(
-    "closed"
-  );
+
   const [isOpen, toggleOpen] = useCycle(false, true);
-  const changeDropdownState = () => {
-    setDropdownState((currState) =>
-      currState === "closed" ? "open" : "closed"
-    );
-  };
 
-  const closeDropdown = () => setDropdownState("closed");
+	  const [dropdownState, setDropdownState] = useState<DropdownState>(`closed`);
 
+    const [activeId, setActiveId] = useState<string>(``);
+
+    const changeDropdownState = (id: string) => {
+      activeId === id &&
+        setDropdownState((currState: DropdownState) =>
+          currState === `open` ? `closed` : `open`
+        );
+      setActiveId(id);
+    };
+    const closeDropdown = () => setDropdownState(`closed`);
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (latest > 300) {
       cycleX(1);
@@ -47,6 +53,7 @@ export const Header = ({
       cycleX(0);
     }
   });
+
 
   return (
     <header
@@ -61,34 +68,48 @@ export const Header = ({
           }  w-full `
       )}
     >
-      <div className="container mx-auto flex  justify-between items-center">
-        <Link to="/" prefetch="intent">
-          <LogoMark width={80} theme="light" />
+      <div className="container mx-auto flex @container gap-4 justify-between items-center">
+        <Link to="/" className="w-12" prefetch="intent">
+          <LogoMark className="w-12 @4xl:w-20" width={80} theme="light" />
         </Link>
         {width > 800 ? (
           <>
-            {" "}
-            <nav className="flex gap-6 ml-auto pr-12 ">
-              {navigation?.map((link) => (
-                <NavLink
-                  key={link._key}
-                  to={link?.item?.slug ?? ""}
-                  prefetch="intent"
-                  className={({ isActive }) =>
-                    cn(
-                      `text-white hover:text-yellow uppercase transition-colors duration-150 tracking-[1.6px] text-base`,
-                      isActive &&
-                        " font-bold hover:text-white border-b-2 border-green"
-                    )
-                  }
-                >
-                  {link?.itemName ?? link?.item?.title}
-                </NavLink>
-              ))}
+            <nav className=" w-full">
+              <ul className="flex gap-6 ml-auto justify-end w-full">
+                {navigation?.map((link) => (
+                  <li key={link._key} className="relative flex items-center gap-px">
+                    <NavLink
+                      key={link._key}
+                      to={link?.item?.slug ?? ""}
+                      prefetch="intent"
+                      onClick={() => closeDropdown()}
+                      className={({ isActive }) =>
+                        cn(
+                          `text-white hover:text-yellow text-sm uppercase transition-colors duration-150 tracking-[1.6px] @4xl:text-base`,
+                          isActive &&
+                            " font-bold hover:text-white border-b-2 border-green"
+                        )
+                      }
+                    >
+                      {link?.itemName ?? link?.item?.title}
+                    </NavLink>
+                    {link.nestedRoutes && link?.nestedRoutes?.length > 0 && (
+                      <DropdownMenu
+												activeId={activeId}
+												changeDropdownState={changeDropdownState}
+												dropdownState={dropdownState}
+												closeDropdown={closeDropdown}
+                        id={link?._key}
+                        items={link.nestedRoutes || []}
+                      />
+                    )}
+                  </li>
+                ))}
+              </ul>
             </nav>
             <Link
               prefetch="intent"
-              className="p-4 border-white border-[1px] text-white uppercase tracking-[1.6px] hover:bg-green hover:border-green transition-colors shadow-sm duration-150 ease-in-out hover:shadow-md flex items-center gap-2"
+              className="p-4 border-white border-[1px] text-white uppercase tracking-[1.6px] hover:bg-green hover:border-green transition-colors shadow-sm duration-150 ease-in-out hover:shadow-md flex items-center gap-2 text-sm @4xl:text-base "
               to="livestream"
             >
               {webcastInProgress && (

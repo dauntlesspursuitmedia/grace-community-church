@@ -1,6 +1,5 @@
 import {
   Links,
-  LiveReload,
   Meta,
   Outlet,
   Scripts,
@@ -15,17 +14,22 @@ import {
   isStegaEnabled,
   studioUrl,
 } from "./sanity/projectDetails";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import VisualEditing from "./components/VisualEditing";
 import { SITE_CONFIG_QUERY } from "./sanity/queries";
 import { loadQuery } from "./sanity/loader.server";
 import { SiteConfigDocument, siteConfigZ } from "./types/siteConfig";
 import { useQuery } from "./sanity/loader";
 import { Layout } from "./components/Layout";
-import { useScrollLock } from "usehooks-ts";
 
 export type RootLoaderWithData = typeof loader;
-
+export type DropdownState = "open" | "closed";
+export interface OutletContext {
+  dropdownState: DropdownState
+  changeDropdownState: (id: string) => void;
+  closeDropdown: () => void;
+  activeId?: string;
+}
 export const links = () => {
   return [
     { rel: "stylesheet", href: styles },
@@ -93,6 +97,7 @@ export default function App() {
     initial,
   });
 
+
   return (
     <html lang="en">
       <head>
@@ -113,7 +118,9 @@ export default function App() {
               webcastInProgress={webcastInProgress}
               siteConfig={loading || !data ? initial.data : data}
             >
-              <Outlet />
+              <Outlet
+
+              />
             </Layout>
           </>
         )}

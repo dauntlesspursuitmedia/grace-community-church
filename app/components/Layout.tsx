@@ -2,6 +2,7 @@ import { PropsWithChildren } from "react";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 import type { SiteConfigDocument } from "~/types/siteConfig";
+import { useOutletContext } from "@remix-run/react";
 
 export type LayoutProps = PropsWithChildren<{
   siteConfig?: SiteConfigDocument;
@@ -14,6 +15,7 @@ export const Layout = ({
   webcastInProgress,
 }: LayoutProps) => {
   const { mainNavigation, ...rest } = siteConfig || {};
+
   return (
     <>
       <Header webcastInProgress={webcastInProgress} navigation={mainNavigation} />
