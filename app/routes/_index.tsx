@@ -3,7 +3,6 @@ import { defer, LoaderFunctionArgs, type MetaFunction } from "@vercel/remix";
 import { Suspense } from "react";
 import { Page } from "~/components/Page";
 import { HeroModule } from "~/components/modules/HeroModule";
-import { urlFor } from "~/lib/urlFor";
 import { useQuery } from "~/sanity/loader";
 import { loadQuery } from "~/sanity/loader.server";
 import { HOME_PAGE_QUERY, HOME_PAGE_QUERY_WITH_TYPE } from "~/sanity/queries";

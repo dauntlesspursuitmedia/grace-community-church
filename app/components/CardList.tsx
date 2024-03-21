@@ -11,7 +11,7 @@ export const CardList = ({ cards, fullWidth }: z.infer<typeof CardsProps>) => {
     <div
       className={cn(
         "@container my-8",
-        !fullWidth && "grid mx-auto  container  px-8 sm:px-0 gap-24"
+        !fullWidth && "grid mx-auto  container  px-8 md:px-0 gap-24"
       )}
     >
       {cards?.map((card, idx) => {

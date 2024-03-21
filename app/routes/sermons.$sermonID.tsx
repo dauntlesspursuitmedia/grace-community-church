@@ -6,14 +6,17 @@ import { HeadingWithSubtitle } from "~/components/modules/HeadingWithSubtitle";
 import { cn } from "~/lib/misc";
 import { ChevronLeft } from "lucide-react";
 
-export const meta: MetaFunction<typeof loader> = ({data, matches}) => {
-	const root = matches.find((match) => match.id === "root")?.data?.initial;
-	console.log(data?.sermon)
-	return [
-		{title: `${data?.sermon?.fullTitle} | ${root?.data?.title} `},
-		{name: "description", content: `${data?.sermon?.displayEventType} - ${data?.sermon?.preachDate} - Series: ${data?.sermon?.subtitle}` }
-	]
-}
+export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
+  const root = matches.find((match) => match.id === "root")?.data?.initial;
+  console.log(data?.sermon);
+  return [
+    { title: `${data?.sermon?.fullTitle} | ${root?.data?.title} ` },
+    {
+      name: "description",
+      content: `${data?.sermon?.displayEventType} - ${data?.sermon?.preachDate} - Series: ${data?.sermon?.subtitle}`,
+    },
+  ];
+};
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   invariant(params.sermonID, "sermonID parameter is required");
@@ -46,8 +49,6 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
 export default function SermonIDRoute() {
   const { sermon } = useLoaderData<typeof loader>();
-
-
 
   const formattedDate = new Intl.DateTimeFormat("en-US", {
     dateStyle: "medium",
@@ -93,18 +94,19 @@ export default function SermonIDRoute() {
         Back to all Sermons
       </NavLink>
       <ul className="flex my-6 divide-x-2 divide-yellow ">
-
-        <li className="uppercase px-4">
-          <NavLink
-            to="v"
-            className={({ isActive }) =>
-              cn(isActive && "text-yellow font-semibold")
-            }
-            prefetch="intent"
-          >
-            Video
-          </NavLink>
-        </li>
+        {sermon?.media?.video && sermon.media.video.length > 0 && (
+          <li className="uppercase px-4">
+            <NavLink
+              to="v"
+              className={({ isActive }) =>
+                cn(isActive && "text-yellow font-semibold")
+              }
+              prefetch="intent"
+            >
+              Video
+            </NavLink>
+          </li>
+        )}
         <li className="uppercase px-4">
           <NavLink
             className={({ isActive }) =>

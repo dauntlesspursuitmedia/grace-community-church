@@ -42,6 +42,7 @@ export default function SermonFormatRoute() {
     <div className={cn("bg-green rounded-md overflow-hidden shadow-md shadow-black/20", format === "v"  ? " aspect-video " : "aspect-auto", !loaded && "animate-pulse")}>
       {/* <pre>{JSON.stringify(sermon, null, 2)}</pre> */}
       <iframe
+				style={{viewTransitionName: "player-expand"}}
         // tabindex="-1"
 				onLoad={() => setIsLoaded(true)}
         width="100%"

@@ -9,8 +9,8 @@ import { cn } from "~/lib/misc";
 
 export const PaginationBar = ({ totalCount }: { totalCount: number }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const $pageNumber = Number(searchParams.get("pageNumber")) || 10;
-  const $top = Number(searchParams.get("top")) || 10;
+  const $pageNumber = Number(searchParams.get("pageNumber")) || 1;
+  const $top = Number(searchParams.get("top")) || 20;
   const totalPages = Math.ceil(totalCount / $top);
   const currentPage = $pageNumber;
   const maxPages = 7;
