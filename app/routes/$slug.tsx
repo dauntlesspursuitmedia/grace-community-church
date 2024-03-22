@@ -1,6 +1,7 @@
 import { useLoaderData, useOutletContext } from "@remix-run/react";
 import { LoaderFunctionArgs, MetaFunction, json } from "@vercel/remix";
 import { Page } from "~/components/Page";
+import { RouteErrorBoundary } from "~/components/RouteErrorBoundary";
 import { urlFor } from "~/lib/urlFor";
 import { useQuery } from "~/sanity/loader";
 import { loadQuery } from "~/sanity/loader.server";
@@ -16,7 +17,6 @@ export const meta: MetaFunction<typeof loader> = ({
   const rootData = matches.find((match) => match.id === "root")?.data?.initial
     ?.data;
 
-  console.log({ routeData, rootData });
   // const image =
   //   urlFor(routeData?.seo?.ogImage || "")
   //     .width(200)
@@ -59,7 +59,7 @@ export const meta: MetaFunction<typeof loader> = ({
 };
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
-  console.log({ params });
+
   const data = await loadQuery<PageDocument>(
     PAGE_QUERY,
     {
@@ -77,11 +77,19 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     throw new Response("Not found", { status: 404 });
   }
 
-  return json({
-    initial: data,
-    query: PAGE_QUERY,
-    params,
-  });
+  return json(
+    {
+      initial: data,
+      query: PAGE_QUERY,
+      params,
+    },
+    {
+      headers: {
+        "Cache-Control":
+          "s-maxage=600, stale-while-revalidate public maxage=600",
+      },
+    }
+  );
 };
 export default function PageRoute() {
   const { query, params, initial } = useLoaderData<typeof loader>();
@@ -95,4 +103,8 @@ export default function PageRoute() {
   }
 
   return <Page pageLayouts={data?.pageLayouts} />;
+}
+
+export function ErrorBoundary() {
+  return <RouteErrorBoundary />;
 }

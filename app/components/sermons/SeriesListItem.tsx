@@ -3,11 +3,11 @@ import { Series } from "types";
 import { formatDate } from "~/lib/formatDate";
 import { cn } from "~/lib/misc";
 
-export const SeriesListItem = ({ series }: { series: Series }) => {
+export const SeriesListItem = ({ series, seriesId }: {seriesId?:string; series: Series }) => {
   return (
     <li
       key={series.seriesID}
-      className="flex h-20 border-b-[1px] border-green-light pb-2 divide-green-light gap-2 items-center w-full "
+      className="flex h-20  py-2 divide-green-light gap-2 items-center w-full "
     >
       {series?.image ? (
         <img width={50} height={50} src={series?.image} alt={series?.title} />

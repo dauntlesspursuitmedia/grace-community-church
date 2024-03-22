@@ -43,7 +43,7 @@ export const CardList = ({ cards, fullWidth }: z.infer<typeof CardsProps>) => {
                       buttonStyle: "solid",
                       color: "black",
                     },
-                    title: "Sign me up",
+                    title: "Learn More",
                   }}
                 />
               )}

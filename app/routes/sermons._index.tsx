@@ -2,6 +2,7 @@ import { NavLink, useLoaderData } from "@remix-run/react";
 import { LoaderFunctionArgs, json } from "@vercel/remix";
 import { SeriesList, SermonList as SermonListType } from "types";
 import { PaginationBar } from "~/components/PaginationBar";
+import { RouteErrorBoundary } from "~/components/RouteErrorBoundary";
 import { SermonList } from "~/components/sermons/SermonList";
 import { cn } from "~/lib/misc";
 
@@ -47,12 +48,14 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
       preachDate: sermon?.preachDate,
     })),
     seriesData,
-  });
+  }, {
+		headers: {
+        "Cache-Control": "s-maxage=600, stale-while-revalidate public maxage=600",
+		}
+	});
 };
 export default function SermonIndexRoute() {
   const data = useLoaderData<typeof loader>();
-
-	console.log(data)
 
   return (
     <section className="@container px-4 max-w-[1920px] w-full mx-auto lg:grid lg:grid-cols-3  lg:gap-8">
@@ -115,4 +118,9 @@ export default function SermonIndexRoute() {
       )}
     </section>
   );
+}
+
+
+export function ErrorBoundary() {
+  return <RouteErrorBoundary />;
 }

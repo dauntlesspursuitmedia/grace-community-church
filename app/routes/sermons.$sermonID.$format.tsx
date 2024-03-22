@@ -2,6 +2,7 @@ import { useLoaderData } from "@remix-run/react";
 import { LoaderFunctionArgs, json } from "@vercel/remix";
 import { useState } from "react";
 import invariant from "tiny-invariant";
+import { RouteErrorBoundary } from "~/components/RouteErrorBoundary";
 import { cn } from "~/lib/misc";
 
 interface LoaderData {
@@ -29,7 +30,10 @@ export const loader = async ({request, params}: LoaderFunctionArgs) => {
     throw new Response("Invalid format", { status: 400 });
 	}
 
-	return json({format, sermonID})
+  return json(
+    { format, sermonID },
+    { headers: { "Cache-Control": "public, max-age=7200, s-maxage=7200" } }
+  );
 }
 
 export default function SermonFormatRoute() {
@@ -54,4 +58,9 @@ export default function SermonFormatRoute() {
       ></iframe>
     </div>
   );
+}
+
+
+export function ErrorBoundary() {
+  return <RouteErrorBoundary />;
 }

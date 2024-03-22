@@ -1,5 +1,6 @@
 import { MetaFunction } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
+import { RouteErrorBoundary } from "~/components/RouteErrorBoundary";
 
 export const meta: MetaFunction = () => {
   return [
@@ -16,4 +17,8 @@ export const meta: MetaFunction = () => {
 
 export default function SermonSeriesRoute() {
   return <Outlet />;
+}
+
+export function ErrorBoundary() {
+  return <RouteErrorBoundary />;
 }

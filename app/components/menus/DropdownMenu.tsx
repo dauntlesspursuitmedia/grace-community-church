@@ -21,7 +21,6 @@ export const DropdownMenu = ({
 	closeDropdown: () => void;
   changeDropdownState: (id: string) => void;
 }) => {
-
   return (
     <>
       <button
@@ -62,10 +61,10 @@ export const DropdownMenu = ({
                   <NavLink
                     onClick={closeDropdown}
                     className={({ isActive }) =>
-                      cn(`hover:text-yellow`,isActive && "text-black font-bold" )
+                      cn(`hover:text-yellow`,isActive && "text-white font-bold" )
                     }
                     to={`${
-                      parent !== "" && item?._type !== "route"
+                      parent !== "" && item?._type === "route"
                         ? `/${parent}`
                         : ""
                     }/${navItem.item?.slug}`}

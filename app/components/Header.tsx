@@ -95,6 +95,7 @@ export const Header = ({
                     </NavLink>
                     {link.nestedRoutes && link?.nestedRoutes?.length > 0 && (
                       <DropdownMenu
+												parent={link?.item?.slug}
 												activeId={activeId}
 												changeDropdownState={changeDropdownState}
 												dropdownState={dropdownState}

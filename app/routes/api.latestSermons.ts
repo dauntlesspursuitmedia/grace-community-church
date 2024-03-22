@@ -28,5 +28,10 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 	}
 
 
-  return json(data);
+  return json(data, {
+    headers: {
+      "Cache-Control":
+        "s-maxage=7200, stale-while-revalidate public maxage=7200",
+    },
+  });
 };

@@ -3,12 +3,17 @@ import { Sermon } from "types";
 import { formatDate } from "~/lib/formatDate";
 import { cn } from "~/lib/misc";
 
-export const SermonListItem = ({ sermon }: { sermon: Sermon }) => {
-
+export const SermonListItem = ({
+  sermon,
+  seriesId,
+}: {
+  seriesId?: string;
+  sermon: Sermon;
+}) => {
   return (
     <li
       key={sermon.sermonID}
-      className="flex h-20 border-b-[1px] border-green-light pb-2 divide-green-light gap-2 items-center w-full "
+      className="flex  py-2  gap-2 items-center w-full "
     >
       <img
         width={50}
@@ -21,7 +26,7 @@ export const SermonListItem = ({ sermon }: { sermon: Sermon }) => {
           cn(`font-medium w-full`, isActive && "text-green pointer-events-none")
         }
         prefetch="intent"
-        to={`/sermons/${sermon.sermonID}/a`}
+        to={`/sermons/${seriesId ? `series/${seriesId}/${sermon.sermonID}` : sermon.sermonID}/a`}
       >
         {sermon.displayTitle}
         <span className={cn("flex gap-2 ", sermon?.bibleText && "flex-col")}>

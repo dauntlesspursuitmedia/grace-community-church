@@ -5,21 +5,23 @@ import { SeriesListItem } from "./SeriesListItem";
 
 export const SermonList = ({
   listItems,
+	seriesId,
   title,
 }: {
+	seriesId?:string;
   title: string;
   listItems: Sermon[] | Series[];
 }) => {
   return (
-    <div className={cn("")}>
+    <div className={cn("w-full")}>
       <h4>{title || "Latest Sermons"}</h4>
-      <ul className="my-4 flex w-full flex-col gap-4 h-[660px] overflow-y-auto">
+      <ul className="my-4 flex w-full flex-col gap-4 h-[660px] overflow-y-auto divide-y-[1px] divide-green-light">
         {listItems?.map((item, idx) => {
           if (item.type === "sermon" && "sermonID" in item) {
-            return <SermonListItem key={item.sermonID} sermon={item} />;
+            return <SermonListItem seriesId={seriesId} key={item.sermonID} sermon={item} />;
           }
           if (item.type === "series" && "seriesID" in item) {
-            return <SeriesListItem key={item?.seriesID} series={item} />;
+            return <SeriesListItem seriesId={seriesId} key={item?.seriesID} series={item} />;
           }
           return <p key={idx}>The type {item?.type} is not handled</p>;
         })}

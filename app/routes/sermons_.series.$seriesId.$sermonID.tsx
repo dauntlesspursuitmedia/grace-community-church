@@ -9,7 +9,7 @@ import { RouteErrorBoundary } from "~/components/RouteErrorBoundary";
 
 export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
   const root = matches.find((match) => match.id === "root")?.data?.initial;
-  console.log(data?.sermon);
+
   return [
     { title: `${data?.sermon?.fullTitle} | ${root?.data?.title} ` },
     {
@@ -43,22 +43,21 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     });
   }
 
-  return json({
-    sermon,
-  }, {
-		headers: {
-			// Cache control header to set cache for 2 hours
-        "Cache-Control": "public, max-age=7200",
-		}
-	});
+  return json(
+    {
+      sermon,
+    },
+    {
+      headers: {
+        "Cache-Control":
+          "s-maxage=28800, stale-while-revalidate public maxage=28800",
+      },
+    }
+  );
 };
 
-export default function SermonIDRoute() {
+export default function SermonInSeriesRoute() {
   const { sermon } = useLoaderData<typeof loader>();
-
-  const formattedDate = new Intl.DateTimeFormat("en-US", {
-    dateStyle: "medium",
-  }).format(new Date(sermon?.preachDate));
 
   if (!sermon) return null;
   return (
@@ -70,35 +69,7 @@ export default function SermonIDRoute() {
         title={sermon?.fullTitle}
         _type="headingWithSubtitle"
       />
-      <div className="px-4 my-4 flex gap-4 items-center">
-        <img
-          width={50}
-          height={50}
-          src={sermon?.speaker?.roundedThumbnailImageURL}
-          alt={sermon?.speaker?.displayName}
-        />
-        <div>
-          <p className="font-bold">{sermon?.speaker?.displayName}</p>
-          <p className="italic text-gray">
-            {sermon?.eventType} - {formattedDate}{" "}
-            {sermon?.bibleText && (
-              <span className="not-italic text-yellow-darker">
-                | {sermon?.bibleText}
-              </span>
-            )}
-          </p>
-        </div>
-      </div>
-      <NavLink
-        to="/sermons"
-        className={({ isActive }) =>
-          cn(isActive && "text-green-light font-normal flex gap-1 items-center")
-        }
-        prefetch="intent"
-      >
-        <ChevronLeft className="size-4" />
-        Back to all Sermons
-      </NavLink>
+
       <ul className="flex my-6 divide-x-2 divide-yellow ">
         {sermon?.media?.video && sermon.media.video.length > 0 && (
           <li className="uppercase px-4">
@@ -129,6 +100,7 @@ export default function SermonIDRoute() {
     </div>
   );
 }
+
 
 export function ErrorBoundary() {
   return <RouteErrorBoundary />;

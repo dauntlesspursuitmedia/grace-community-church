@@ -1,19 +1,20 @@
 import { MetaFunction } from "@vercel/remix";
+import { RouteErrorBoundary } from "~/components/RouteErrorBoundary";
 
 export const meta: MetaFunction = () => {
-	return [
-		{
-			title: "Livestream | Grace Community Church"
-		},
-		{
-			name: "description",
-			content: "Watch the Grace Community Church Livestream"
-		}
-	]
-}
+  return [
+    {
+      title: "Livestream | Grace Community Church",
+    },
+    {
+      name: "description",
+      content: "Watch the Grace Community Church Livestream",
+    },
+  ];
+};
 
 export default function LivestreamRoute() {
-	return (
+  return (
     <section className="flex flex-col gap-24 container mx-auto my-24 items-center justify-center">
       <h1 className="self-start">Livestream</h1>
       <div className="relative w-full h-full aspect-video">
@@ -51,7 +52,7 @@ export default function LivestreamRoute() {
       <div className=" container mx-autorelative w-full h-full aspect-video">
         <iframe
           tabIndex="-1"
-					title="single sermon video"
+          title="single sermon video"
           width="100%"
           height={500}
           src="https://embed.sermonaudio.com/player/v/broadcaster/cbcofmanchestertn/"
@@ -63,4 +64,8 @@ export default function LivestreamRoute() {
       </div>
     </section>
   );
+}
+
+export function ErrorBoundary() {
+  return <RouteErrorBoundary />;
 }

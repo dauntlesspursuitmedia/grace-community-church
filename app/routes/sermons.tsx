@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from "@remix-run/react";
 import { MetaFunction } from "@vercel/remix";
+import { RouteErrorBoundary } from "~/components/RouteErrorBoundary";
 import { cn } from "~/lib/misc";
 
 export const meta: MetaFunction = () => {
@@ -32,4 +33,8 @@ export default function SermonsPage() {
       </div>
     </section>
   );
+}
+
+export function ErrorBoundary() {
+  return <RouteErrorBoundary />;
 }

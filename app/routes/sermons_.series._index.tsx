@@ -4,6 +4,8 @@ import { CameraOff } from "lucide-react";
 
 import { SeriesList } from "types";
 import { PaginationBar } from "~/components/PaginationBar";
+import { RouteErrorBoundary } from "~/components/RouteErrorBoundary";
+import { formatDate } from "~/lib/formatDate";
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const BROADCASTER_ID = process.env.SERMON_AUDIO_BROADCAST_ID!;
@@ -29,9 +31,17 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     throw new Response("No sermons found...", { status: 404 });
   }
 
-  return json({
-    data,
-  });
+  return json(
+    {
+      data,
+    },
+    {
+      headers: {
+        "Cache-Control":
+          "s-maxage=7200, stale-while-revalidate public maxage=7200",
+      },
+    }
+  );
 };
 export default function SermonSeriesIndexPage() {
   const { data } = useLoaderData<typeof loader>();
@@ -67,6 +77,20 @@ export default function SermonSeriesIndexPage() {
                   {series.title}
                 </h3>
                 {series?.description && <p>{series.description}</p>}
+                <span className="flex flex-col">
+                  <small>
+                    Series Created:{" "}
+                    <span className="italic text-yellow-darker font-bold">
+                      {formatDate(series.earliest)}
+                    </span>
+                  </small>
+                  <small>
+                    Last updated:{" "}
+                    <span className="italic text-yellow-darker font-bold">
+                      {formatDate(series.latest)}
+                    </span>
+                  </small>
+                </span>
               </div>
             </Link>
           </div>
@@ -74,8 +98,12 @@ export default function SermonSeriesIndexPage() {
       </div>
       {/* <pre>{JSON.stringify(data, null, 2)}</pre> */}
       <div className="container mx-auto flex items-center justify-center mt-12">
-				<PaginationBar totalCount={data.totalCount} />
-			</div>
+        <PaginationBar totalCount={data.totalCount} />
+      </div>
     </section>
   );
+}
+
+export function ErrorBoundary() {
+  return <RouteErrorBoundary />;
 }

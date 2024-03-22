@@ -223,6 +223,26 @@ export const PAGE_MODULES_QUERY = groq`
 		${UI_COMPONENT_FRAGMENT}
 	}
 `;
+
+export const MINISTRY_QUERY = groq`
+	*[_type == "ministry" && $slug == slug.current ][0]{
+		_id,
+
+		_type,
+		title,
+		"slug": slug.current,
+		description{
+			${RICH_TEXT_FRAGMENT}
+		},
+		mainImage {
+			${IMAGE_QUERY}
+		},
+		photoGallery[] {
+			_type,
+			${IMAGE_WITH_CAPTION_FRAGMENT}
+		}
+	}
+`;
 export const SITE_CONFIG_QUERY = groq`
 	*[_type == "siteConfig"][0]{
 		title,
