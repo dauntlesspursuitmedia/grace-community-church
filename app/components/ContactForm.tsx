@@ -1,3 +1,5 @@
+import { CustomSelect } from "~/routes/resources.contactForm";
+
 export const ContactForm = () => {
   return (
     <section className="container mx-auto @container">
@@ -5,7 +7,7 @@ export const ContactForm = () => {
 
       <form >
         <h2 className="text-center">Send us a message!</h2>
-
+				<CustomSelect />
       </form>
 			<div>This is a test for the map embed</div>
       {/* <iframe

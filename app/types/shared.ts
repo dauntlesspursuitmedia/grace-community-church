@@ -140,7 +140,7 @@ export const uiComponentRefZ = z.object({
   _type: z.literal("uiComponentRef"),
   _key: z.string().nullish(),
   name: z
-    .enum(["contactForm", "registrationForm", "recentSermons"])
+    .enum(["contactForm",  "recentSermons"])
     .default("contactForm"),
 });
 export const heroModuleZ = z.object({

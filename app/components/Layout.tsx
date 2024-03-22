@@ -2,7 +2,8 @@ import { PropsWithChildren } from "react";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 import type { SiteConfigDocument } from "~/types/siteConfig";
-import { useOutletContext } from "@remix-run/react";
+import { useLocation, useOutletContext } from "@remix-run/react";
+import { cn } from "~/lib/misc";
 
 export type LayoutProps = PropsWithChildren<{
   siteConfig?: SiteConfigDocument;
@@ -19,9 +20,8 @@ export const Layout = ({
   return (
     <>
       <Header webcastInProgress={webcastInProgress} navigation={mainNavigation} />
-      <main className="grow main-layout">
+      <main className={cn("grow main-layout", useLocation().pathname !== "/" && "mt-16")}>
         {children}
-        {/* <pre>{JSON.stringify(siteConfig, null, 2)}</pre> */}
       </main>
       <Footer {...rest} />
 

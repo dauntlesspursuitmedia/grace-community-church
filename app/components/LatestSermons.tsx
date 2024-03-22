@@ -5,7 +5,9 @@ import { cn } from "~/lib/misc";
 
 export const LatestSermonsList = ({
   theme = "light",
+	className=""
 }: {
+	className?: string;
   theme: "light" | "dark";
 }) => {
   const sermonFetcher = useFetcher<Promise<SermonList>>();
@@ -19,7 +21,7 @@ export const LatestSermonsList = ({
   }, [sermonFetcher, pageSize]);
 
   return (
-    <div className={cn(theme === "light" ? "text-white" : "text-black")}>
+    <div className={cn(className, theme === "light" ? "text-white" : "text-black")}>
       <h2
         className={cn(
           "uppercase tracking-[2.4px] text-2xl font-bold leading-8",
@@ -33,7 +35,7 @@ export const LatestSermonsList = ({
           latestSermons?.map((sermon) => {
             return (
               <li key={sermon?.sermonID} className="underline ">
-                <Link to={`/sermons/${sermon?.sermonID}`}>
+                <Link to={`/sermons/${sermon?.sermonID}/a`}>
                   {sermon?.displayTitle}
                 </Link>
               </li>

@@ -243,6 +243,13 @@ export const MINISTRY_QUERY = groq`
 		}
 	}
 `;
+export const ALL_MINISTRIES = groq`
+	*[_type == "ministry"]{
+		_id,
+		_type,
+		title,
+	}
+`;
 export const SITE_CONFIG_QUERY = groq`
 	*[_type == "siteConfig"][0]{
 		title,
