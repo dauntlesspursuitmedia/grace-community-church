@@ -9,6 +9,6 @@ export const UiComponentRef = ({ name }: z.infer<typeof uiComponentRefZ>) => {
 
 	if(name === "contactForm") return <ContactForm />
 
-	return <LatestSermonsList className="container px-8 my-8 mx-auto" theme="dark" />
+	return <LatestSermonsList className="container px-8 max-w-max my-8 mx-auto" theme="dark" />
 
 };

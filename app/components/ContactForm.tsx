@@ -1,23 +1,138 @@
+import { ValidatedForm, useField, useIsSubmitting } from "remix-validated-form";
+import { withZod } from "@remix-validated-form/with-zod";
+import { z } from "zod";
 import { CustomSelect } from "~/routes/resources.contactForm";
+import { PlaneIcon, PlaneLanding, Send } from "lucide-react";
+import { cn } from "~/lib/misc";
+import { toTitleCase } from "~/lib/toTitleCase";
+import { HTMLInputTypeAttribute } from "react";
+import { useSearchParams } from "@remix-run/react";
+export const validator = withZod(
+  z.object({
+    name: z.string().min(1, { message: "Name is required" }),
+    email: z
+      .string()
+      .min(2, { message: "Email is required" })
+      .email("Must be a valid email"),
+    phone: z.string().nullish(),
+    subject: z.string().nullish(),
+    message: z
+      .string()
+      .min(15, { message: "Please leave a more detailed message" }),
+  })
+);
+
+type FormInputProps = {
+  name: string;
+  label: string;
+  type: HTMLInputTypeAttribute | "textarea";
+  placeholder?: string;
+};
+
+const FormInput = ({
+  name,
+  label,
+  type = "text",
+  placeholder,
+}: FormInputProps) => {
+  const { error, getInputProps } = useField(name);
+  return (
+    <div className="w-full flex flex-col @sm:flex-row items-center gap-1 @sm:gap-4 justify-between">
+      <label
+        htmlFor={name}
+        className="form-label font-semibold self-start @sm:self-center"
+      >
+        {label}
+      </label>
+      <div className={cn("flex-1 max-w-96 flex flex-col", error && " gap-1")}>
+        {type === "textarea" ? (
+          <textarea
+            rows={4}
+            className="resize-y"
+            {...getInputProps({ id: name, placeholder: placeholder ?? label })}
+          />
+        ) : (
+          <input
+            {...getInputProps({
+              id: name,
+              placeholder: placeholder ?? label,
+              type,
+            })}
+            className="border-gray/30 rounded-sm"
+          />
+        )}
+        {error && <span className="text-sm text-[#ff0000]">{error}</span>}
+      </div>
+    </div>
+  );
+};
 
 export const ContactForm = () => {
+  const isSubmitting = useIsSubmitting("contactForm");
+  const [searchParams] = useSearchParams();
+  const defaultSubject = "Grace Works";
   return (
-    <section className="container mx-auto @container">
-			<div className="flex flex-col gap-8 @lg:flex-row justify-center">
+    <ValidatedForm
+      id="contactForm"
+      validator={validator}
+      action="/resources/contactForm"
+      method="post"
+      defaultValues={{
+        name: "",
+        phone: "",
+        subject: `${searchParams.get("subject") || "generalInquiry"}`,
 
-      <form >
-        <h2 className="text-center">Send us a message!</h2>
-				<CustomSelect />
-      </form>
-			<div>This is a test for the map embed</div>
-      {/* <iframe
-        src={`https://www.google.com/maps/embed/v1/place?q=4969%20McMinnville%20Hwy%20Manchester%2c%20TN&zoom=15&key=AIzaSyBnjnL6E1MNmfbfYNABMfBzYiS80Xv00D4&attribution_source=Google+Maps+Embed+API&attribution_web_url=https://developers.google.com/maps/documentation/embed/`}
-        title="Country Barn Construction Map"
-        width="100%"
-        height="500"
-        frameBorder="0"
-      /> */}
-			</div>
-    </section>
+        message: ``,
+        email: "",
+      }}
+      className="@container flex gap-4 flex-col px-8 w-full max-w-[550px] mx-auto"
+    >
+      <h2 className="text-center">Send us a message!</h2>
+
+      <FormInput type="text" name="name" label="Full Name" />
+      <FormInput
+        type="email"
+        name="email"
+        label="Email"
+        placeholder="Please enter your email"
+      />
+      <FormInput
+        type="tel"
+        name="phone"
+        label="Phone"
+        placeholder="Please enter a valid U.S phone number"
+      />
+      <div className="w-full flex flex-col @sm:flex-row items-center gap-1 @sm:gap-4 justify-between">
+        <label
+          htmlFor="subject"
+          className="form-label font-semibold self-start @sm:self-center"
+        >
+          Subject
+        </label>
+        <CustomSelect
+          defaultValue={defaultSubject}
+          name="subject"
+          label="Subject"
+          className="flex-1 max-w-96 border-gray/30 rounded-sm"
+        />
+      </div>
+
+      <FormInput
+        type="textarea"
+        name="message"
+        label="Message"
+        placeholder="Please leave a detailed message"
+      />
+
+      <div className="ml-auto">
+        <button
+          type="submit"
+          className="border-black border-[1px] text-black  hover:bg-black hover:border-black hover:text-white	focus:text-white focus:bg-black focus:border-black uppercase no-underline font-semibold tracking-[1.6px] p-2 transition-colors shadow-sm duration-150 ease-in-out hover:shadow-md flex gap-1"
+        >
+          <Send />
+          {isSubmitting ? "Sending..." : "Send Message"}
+        </button>
+      </div>
+    </ValidatedForm>
   );
 };

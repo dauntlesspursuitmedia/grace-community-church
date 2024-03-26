@@ -87,7 +87,7 @@ export default function MinistryIdRoute() {
                   buttonStyle: "outline",
                 },
                 title: `Contact us about ${data?.title}`,
-                internalLink: { slug: `/contact?subject=${data?.title}` },
+                internalLink: { slug: `/contact?subject=${data?.title}&subjectId=${data?._id}` },
                 _type: "action",
               }}
             />

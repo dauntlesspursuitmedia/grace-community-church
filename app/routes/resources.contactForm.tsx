@@ -1,12 +1,17 @@
 import { useFetcher } from "@remix-run/react";
-import { LoaderFunctionArgs, json } from "@vercel/remix";
+import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@vercel/remix";
 import { useEffect } from "react";
 import { z } from "zod";
 import { loadQuery } from "~/sanity/loader.server";
 import { ALL_MINISTRIES } from "~/sanity/queries";
 import { MinistryType, ministryZ } from "~/types/ministry";
-import Select from "react-select";
-import {useField useControlField} from 'remix-validated-form'
+import Select, { SingleValue } from "react-select";
+import {
+  useField,
+  useControlField,
+  validationError,
+} from "remix-validated-form";
+import { validator } from "~/components/ContactForm";
 export const loader = async ({ params }: LoaderFunctionArgs) => {
   const data = await loadQuery<MinistryType[]>(ALL_MINISTRIES).then((res) => ({
     ...res,
@@ -27,9 +32,34 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
   });
 };
 
-export const CustomSelect = () => {
-	const { error, getInputProps, validate } = useField("ministry");
-  const [value, setValue] = useControlField<string[]>("ministry");
+export const action = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData();
+
+  const result = await validator.validate(formData);
+
+  if (result.error) {
+    return validationError(result.error);
+  }
+
+  const { email, phone, subject, message, name } = result.data;
+  console.log({ email, phone, subject, message, name });
+  return null;
+};
+
+export const CustomSelect = ({
+  name,
+  label,
+  className = "",
+  defaultValue,
+}: {
+  className?: string;
+  name: string;
+  label: string;
+  defaultValue?: string;
+}) => {
+  const { error, getInputProps, validate } = useField(name);
+  // const [value, setValue] =
+  //   useControlField<SingleValue<{ label: string; value: string }>>(name);
   const ministryFetcher = useFetcher<typeof loader>();
   const ministries = ministryFetcher.data?.ministries ?? [];
 
@@ -39,5 +69,18 @@ export const CustomSelect = () => {
     }
   }, [ministryFetcher]);
 
-  return <Select defaultValue={} name="ministry" onChange={} options={ministries} />;
+	console.log({defaultValue})
+
+  return (
+    <>
+      <select defaultValue={defaultValue} {...getInputProps({ id: "subject" })}>
+        {ministries?.map((item) => (
+          <option key={item.value} value={item.label}>
+            {item.label}
+          </option>
+        ))}
+      </select>
+      {error && <span className="text-sm text-[#ff0000]">{error}</span>}
+    </>
+  );
 };
