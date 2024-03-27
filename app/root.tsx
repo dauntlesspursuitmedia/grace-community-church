@@ -25,7 +25,7 @@ import { Layout } from "./components/Layout";
 export type RootLoaderWithData = typeof loader;
 export type DropdownState = "open" | "closed";
 export interface OutletContext {
-  dropdownState: DropdownState
+  dropdownState: DropdownState;
   changeDropdownState: (id: string) => void;
   closeDropdown: () => void;
   activeId?: string;
@@ -92,17 +92,33 @@ export default function App() {
   const { sanity, webcastInProgress, ENV, initial, query, params } =
     useLoaderData<typeof loader>();
 
-
   const { data, loading } = useQuery<typeof initial.data>(query, params, {
     initial,
   });
-
 
   return (
     <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest"></link>
         <Meta />
         <Links />
       </head>
@@ -118,9 +134,7 @@ export default function App() {
               webcastInProgress={webcastInProgress}
               siteConfig={loading || !data ? initial.data : data}
             >
-              <Outlet
-
-              />
+              <Outlet />
             </Layout>
           </>
         )}
