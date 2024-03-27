@@ -1,5 +1,16 @@
+import { MetaFunction } from "@remix-run/react";
 import { LatestSermonsList } from "~/components/LatestSermons";
 
+export const meta: MetaFunction = () => {
+	return [
+		{
+      title: "Thank You | Grace Community Church",
+		},
+		{
+			name: "robots", content: "noindex, nofollow"
+		}
+	]
+}
 export default function ThankYouRoute() {
     return (
         <div className="mx-auto container flex flex-col gap-8 items-center justify-center">
@@ -9,4 +20,4 @@ export default function ThankYouRoute() {
             <LatestSermonsList className="my-32" theme="dark"  />
         </div>
     )
-} 
+}

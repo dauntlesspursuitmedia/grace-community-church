@@ -50,12 +50,12 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return validationError(result.error);
   }
 
-  
+
 
   const { email, phone, subject, message, name, ministries } = result.data;
   const modifiedSubject = JSON.parse(ministries || "").find(
     (item: { value: string }) => item.value === subject
-  )?.label;
+  )?.label ?? "General Inquiry"
   console.log({ email, phone, subject, message, name, ministries, modifiedSubject });
   return redirect("/thank-you");
 };
@@ -85,13 +85,6 @@ export const CustomSelect = ({
 
   return (
     <>
-      {/* <select defaultValue={value.value} key="test" {...getInputProps({ id: "subject" })}>
-        {ministries?.map((item) => (
-          <option key={item.value} value={item.label}>
-            {item.label}
-          </option>
-        ))}
-      </select> */}
       <input
         type="hidden"
         name="ministries"
