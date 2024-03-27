@@ -4,9 +4,8 @@
  * For more information, see https://remix.run/file-conventions/entry.server
  */
 
-import type { AppLoadContext, EntryContext } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
-import { handleRequest } from "@vercel/remix";
+import { handleRequest, AppLoadContext, EntryContext } from "@vercel/remix";
 
 // const ABORT_DELAY = 5_000;
 

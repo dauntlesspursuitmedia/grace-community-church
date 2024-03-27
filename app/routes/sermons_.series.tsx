@@ -1,4 +1,4 @@
-import { MetaFunction } from "@remix-run/node";
+import { MetaFunction } from "@vercel/remix";
 import { Outlet } from "@remix-run/react";
 import { RouteErrorBoundary } from "~/components/RouteErrorBoundary";
 

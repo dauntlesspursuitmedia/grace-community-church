@@ -8,8 +8,6 @@ export default defineConfig({
 	plugins: [
 		remix({
 			presets: [vercelPreset()],
-			ignoredRouteFiles: ["**/.*"],
-      serverModuleFormat: "cjs",
 		}),
 		tsconfigPaths()
 	]

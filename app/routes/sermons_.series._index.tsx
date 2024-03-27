@@ -1,4 +1,4 @@
-import { json } from "@remix-run/node";
+import { json } from "@vercel/remix";
 import { Link, useLoaderData } from "@remix-run/react";
 import { CameraOff } from "lucide-react";
 
