@@ -7,7 +7,7 @@ import { useQuery } from "~/sanity/loader";
 import { loadQuery } from "~/sanity/loader.server";
 import { PAGE_QUERY } from "~/sanity/queries";
 import { PageDocument, pageZ } from "~/types/page";
-
+import { FormDefaults, setFormDefaults } from "remix-validated-form";
 export const meta: MetaFunction<typeof loader> = ({
   data,
   matches,
@@ -60,6 +60,9 @@ export const meta: MetaFunction<typeof loader> = ({
 
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 
+  const url = new URL(request.url)
+
+  const {searchParams} = url
   const data = await loadQuery<PageDocument>(
     PAGE_QUERY,
     {
@@ -77,11 +80,22 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
     throw new Response("Not found", { status: 404 });
   }
 
-  return json(
+  return json<typeof data & FormDefaults>(
     {
       initial: data,
       query: PAGE_QUERY,
       params,
+      ...setFormDefaults("contactForm", {
+        name: "",
+        phone: "",
+        subject: {
+          label: `${searchParams.get("subject") || "General Inquiry"}`,
+          value: `${searchParams.get("subjectId") || "generalInquiry"}`,
+        },
+  
+        message: ``,
+        email: "",
+      })
     },
     {
       headers: {

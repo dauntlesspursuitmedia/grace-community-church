@@ -2,12 +2,12 @@ import { ValidatedForm, useField, useIsSubmitting } from "remix-validated-form";
 import { withZod } from "@remix-validated-form/with-zod";
 import { z } from "zod";
 import { CustomSelect } from "~/routes/resources.contactForm";
-import { PlaneIcon, PlaneLanding, Send } from "lucide-react";
+import { Send } from "lucide-react";
 import { cn } from "~/lib/misc";
 import { toTitleCase } from "~/lib/toTitleCase";
 import { HTMLInputTypeAttribute } from "react";
 import { useSearchParams } from "@remix-run/react";
-export const validator = withZod(
+export const contactFormValidator = withZod(
   z.object({
     name: z.string().min(1, { message: "Name is required" }),
     email: z
@@ -15,10 +15,11 @@ export const validator = withZod(
       .min(2, { message: "Email is required" })
       .email("Must be a valid email"),
     phone: z.string().nullish(),
-    subject: z.string().nullish(),
+    subject: z.any().nullish(),
     message: z
       .string()
       .min(15, { message: "Please leave a more detailed message" }),
+      ministries: z.string().nullish()
   })
 );
 
@@ -70,17 +71,20 @@ const FormInput = ({
 export const ContactForm = () => {
   const isSubmitting = useIsSubmitting("contactForm");
   const [searchParams] = useSearchParams();
-  const defaultSubject = "Grace Works";
+
   return (
     <ValidatedForm
       id="contactForm"
-      validator={validator}
+      validator={contactFormValidator}
       action="/resources/contactForm"
       method="post"
       defaultValues={{
         name: "",
         phone: "",
-        subject: `${searchParams.get("subject") || "generalInquiry"}`,
+        subject: {
+          label: `${searchParams.get("subject") || "General Inquiry"}`,
+          value: `${searchParams.get("subjectId") || "generalInquiry"}`,
+        },
 
         message: ``,
         email: "",
@@ -110,7 +114,7 @@ export const ContactForm = () => {
           Subject
         </label>
         <CustomSelect
-          defaultValue={defaultSubject}
+          // defaultValue={defaultSubject}
           name="subject"
           label="Subject"
           className="flex-1 max-w-96 border-gray/30 rounded-sm"

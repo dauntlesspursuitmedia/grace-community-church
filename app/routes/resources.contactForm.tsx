@@ -1,18 +1,25 @@
 import { useFetcher } from "@remix-run/react";
-import { ActionFunctionArgs, LoaderFunctionArgs, json } from "@vercel/remix";
-import { useEffect } from "react";
+import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from "@vercel/remix";
+import { HTMLInputTypeAttribute, useEffect } from "react";
 import { z } from "zod";
 import { loadQuery } from "~/sanity/loader.server";
 import { ALL_MINISTRIES } from "~/sanity/queries";
 import { MinistryType, ministryZ } from "~/types/ministry";
-import Select, { SingleValue } from "react-select";
+import Select from "react-select";
 import {
   useField,
   useControlField,
+  setFormDefaults,
+  ValidatedForm,
+  useIsSubmitting,
   validationError,
 } from "remix-validated-form";
-import { validator } from "~/components/ContactForm";
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+import { Send } from "lucide-react";
+import { cn } from "~/lib/misc";
+import { contactFormValidator } from "~/components/ContactForm";
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
+  const { searchParams } = new URL(request.url);
+
   const data = await loadQuery<MinistryType[]>(ALL_MINISTRIES).then((res) => ({
     ...res,
     data: res
@@ -35,33 +42,40 @@ export const loader = async ({ params }: LoaderFunctionArgs) => {
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
 
-  const result = await validator.validate(formData);
+  // console.log(formData.get);
+
+  const result = await contactFormValidator.validate(formData);
 
   if (result.error) {
     return validationError(result.error);
   }
 
-  const { email, phone, subject, message, name } = result.data;
-  console.log({ email, phone, subject, message, name });
-  return null;
+  
+
+  const { email, phone, subject, message, name, ministries } = result.data;
+  const modifiedSubject = JSON.parse(ministries || "").find(
+    (item: { value: string }) => item.value === subject
+  )?.label;
+  console.log({ email, phone, subject, message, name, ministries, modifiedSubject });
+  return redirect("/thank-you");
 };
 
 export const CustomSelect = ({
   name,
-  label,
   className = "",
-  defaultValue,
 }: {
   className?: string;
   name: string;
   label: string;
-  defaultValue?: string;
 }) => {
   const { error, getInputProps, validate } = useField(name);
-  // const [value, setValue] =
-  //   useControlField<SingleValue<{ label: string; value: string }>>(name);
+  const [value, setValue] = useControlField<{ label: string; value: string }>(
+    name
+  );
   const ministryFetcher = useFetcher<typeof loader>();
   const ministries = ministryFetcher.data?.ministries ?? [];
+
+  console.log({ value, ...getInputProps({ id: "subject" }) });
 
   useEffect(() => {
     if (ministryFetcher.state === "idle" && ministryFetcher.data == null) {
@@ -69,18 +83,33 @@ export const CustomSelect = ({
     }
   }, [ministryFetcher]);
 
-	console.log({defaultValue})
-
   return (
     <>
-      <select defaultValue={defaultValue} {...getInputProps({ id: "subject" })}>
+      {/* <select defaultValue={value.value} key="test" {...getInputProps({ id: "subject" })}>
         {ministries?.map((item) => (
           <option key={item.value} value={item.label}>
             {item.label}
           </option>
         ))}
-      </select>
-      {error && <span className="text-sm text-[#ff0000]">{error}</span>}
+      </select> */}
+      <input
+        type="hidden"
+        name="ministries"
+        value={JSON.stringify(ministries, null, 2)}
+      />
+      {/* {ministries?.map((item) => (
+        <option key={item.value} value={item.label}>
+          {item.label}
+        </option>
+      ))} */}
+      <Select
+        {...getInputProps({ id: "subject" })}
+        className={className}
+        defaultValue={value}
+        options={ministries}
+        name={name}
+      />
+      {error && <span className="text-sm texff0000]">{error}</span>}
     </>
   );
 };
