@@ -1,11 +1,17 @@
 import { useFetcher } from "@remix-run/react";
-import { ActionFunctionArgs, LoaderFunctionArgs, json, redirect } from "@vercel/remix";
+import {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  json,
+  redirect,
+} from "@vercel/remix";
 import { HTMLInputTypeAttribute, useEffect } from "react";
 import { z } from "zod";
 import { loadQuery } from "~/sanity/loader.server";
 import { ALL_MINISTRIES } from "~/sanity/queries";
 import { MinistryType, ministryZ } from "~/types/ministry";
 import Select from "react-select";
+import sgMail from "@sendgrid/mail";
 import {
   useField,
   useControlField,
@@ -17,6 +23,7 @@ import {
 import { Send } from "lucide-react";
 import { cn } from "~/lib/misc";
 import { contactFormValidator } from "~/components/ContactForm";
+import { writeClient } from "~/sanity/client.server";
 export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const { searchParams } = new URL(request.url);
 
@@ -40,24 +47,112 @@ export const loader = async ({ request, params }: LoaderFunctionArgs) => {
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
+  sgMail.setApiKey(process.env.SENDGRID_KEY as string);
   const formData = await request.formData();
-
-  // console.log(formData.get);
-
   const result = await contactFormValidator.validate(formData);
+
+
+  const captchaResponse = await fetch(
+    `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.GOOGLE_RECAPTCHA_SECRET_KEY}&response=${result?.submittedData.captchaToken}`,
+    {
+      method: `POST`,
+    }
+  ).then((res) => res.json());
+
+  if (captchaResponse < 0.5) {
+    return redirect(`/`);
+  }
 
   if (result.error) {
     return validationError(result.error);
   }
 
+  if (result.submittedData[`got-ya`]?.length) {
+    return json(
+      { message: `` },
+      { status: 500, statusText: `We don't take kindly to spammers` }
+    );
+  }
+
+  if (!result.submittedData.captchaToken) {
+    return json({ message: `` }, { status: 500 });
+  }
+
+  const { email, phone, subject, message, name, ministries } =
+    result.submittedData;
+  const modifiedSubject =
+    JSON.parse(ministries || "").find(
+      (item: { value: string }) => item.value === subject
+    )?.label ?? "General Inquiry";
+
+  const sanitySubmission = await writeClient.createIfNotExists({
+    _id: `$${email}-{message}`,
+    email,
+    phone,
+    message,
+    name,
+    subject: modifiedSubject,
+    _type: `formSubmission`,
+  });
+
+  if (!sanitySubmission) {
+    return json(
+      { message: `something went wrong with the form submission` },
+      { status: 500 }
+    );
+  }
+
+  const emailTemplate = `
+	<div>
+	<h1>New Form Submission</h1>
+	<p><strong>Name: </strong>${name}</p>
+	<p><strong>Subject: </strong>${modifiedSubject}</p>
+	<p><strong>Email: </strong><a href="mailto:${email}">${email}</a></p>
+	<p><strong>Phone: </strong><a href="tel:+1${phone}">${phone}</a></p>
+	<p><strong>message: </strong>${message}</p>
+	</div>
+	`;
+  const msg = {
+    // TODO: Figure out how to dynamically change between to address
+    to: `luke@dauntlesspursuitmedia.com`,
+    from: `jon.hollifield@yahoo.com`,
+    replyTo: result?.submittedData?.email,
+    subject: `New contact form submission from ${result?.submittedData.name}`,
+    text: `${result?.submittedData.message}`,
+    html: emailTemplate,
+  };
+  /*
 
 
-  const { email, phone, subject, message, name, ministries } = result.data;
-  const modifiedSubject = JSON.parse(ministries || "").find(
-    (item: { value: string }) => item.value === subject
-  )?.label ?? "General Inquiry"
-  console.log({ email, phone, subject, message, name, ministries, modifiedSubject });
-  return redirect("/thank-you");
+
+  if (error) {
+		return validationError(error)
+  }
+
+
+
+  const assignSubmissionToId = personData?.person.filter(
+		(person) => person._id !== personData?.lastFormSubmit?.assignedTo?._id,
+		)
+
+		const { shedInfo, ...rest } = submittedData
+
+		*/
+
+  // Send email via sendgrid
+  await sgMail
+    .send(msg)
+    .then(() => {
+      console.log(`Email sent`);
+    })
+    .catch((error) => {
+      console.error(error);
+      return json(
+        { error },
+        { status: 500, statusText: `Error submitting form, please try again` }
+      );
+    });
+  return redirect(`/thank-you`);
 };
 
 export const CustomSelect = ({

@@ -6,9 +6,11 @@ import { Send } from "lucide-react";
 import { cn } from "~/lib/misc";
 import { toTitleCase } from "~/lib/toTitleCase";
 import { HTMLInputTypeAttribute } from "react";
-import { useSearchParams } from "@remix-run/react";
+import { useSearchParams, useSubmit } from "@remix-run/react";
 export const contactFormValidator = withZod(
   z.object({
+    "got-ya": z.string().optional(),
+    captchaToken: z.any().nullish(),
     name: z.string().min(1, { message: "Name is required" }),
     email: z
       .string()
@@ -19,7 +21,7 @@ export const contactFormValidator = withZod(
     message: z
       .string()
       .min(15, { message: "Please leave a more detailed message" }),
-      ministries: z.string().nullish()
+    ministries: z.string().nullish(),
   })
 );
 
@@ -71,13 +73,35 @@ const FormInput = ({
 export const ContactForm = () => {
   const isSubmitting = useIsSubmitting("contactForm");
   const [searchParams] = useSearchParams();
+	const submit = useSubmit()
 
   return (
     <ValidatedForm
       id="contactForm"
       validator={contactFormValidator}
-      action="/resources/contactForm"
+      // action="/resources/contactForm"
       method="post"
+      onSubmit={async (deets, event) => {
+        event.preventDefault();
+
+        // call grecaptcha.ready
+        grecaptcha.ready(function () {
+          // call execute recaptcha
+          grecaptcha
+            .execute(`6LcRkwQmAAAAAOfKktDsoc6iZvm0CWf5eg0dtWlJ`, {
+              action: `submit`,
+            })
+            .then(function (token: string) {
+              // add token to form
+              deets.captchaToken = token;
+              // finally submit the form data, re-using the method and action from the form
+              submit(deets, {
+                method: `post`,
+                action: `/resources/contactForm`,
+              });
+            });
+        });
+      }}
       defaultValues={{
         name: "",
         phone: "",
@@ -92,7 +116,12 @@ export const ContactForm = () => {
       className="@container flex gap-4 flex-col px-8 w-full max-w-[550px] mx-auto"
     >
       <h2 className="text-center">Send us a message!</h2>
-
+      <p className="[clip:rect(0 0 0 0)] absolute -m-[1px] h-[1px] w-[1px] overflow-hidden border-0 p-0">
+        <label htmlFor="got-ya">
+          Don’t fill this out if you’re human:{` `}
+          <input tabIndex={-1} type="text" name="got-ya" autoComplete="false" />
+        </label>
+      </p>
       <FormInput type="text" name="name" label="Full Name" />
       <FormInput
         type="email"

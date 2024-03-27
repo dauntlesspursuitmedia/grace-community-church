@@ -22,6 +22,9 @@ import { SiteConfigDocument, siteConfigZ } from "./types/siteConfig";
 import { useQuery } from "./sanity/loader";
 import { Layout } from "./components/Layout";
 
+declare global {
+  const grecaptcha: any;
+}
 export type RootLoaderWithData = typeof loader;
 export type DropdownState = "open" | "closed";
 export interface OutletContext {
@@ -69,6 +72,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   return json({
     webcastInProgress,
+    gaTrackingId: process.env.GA_TRACKING_ID,
     initial,
     query: SITE_CONFIG_QUERY,
     params: {},
@@ -77,6 +81,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       stegaEnabled,
     },
     ENV: {
+      GOOGLE_RECAPTCHA_SITE_KEY: process.env.GOOGLE_RECAPTCHA_SITE_KEY!,
       SANITY_STUDIO_PROJECT_ID: process.env.SANITY_STUDIO_PROJECT_ID!,
       SANITY_STUDIO_DATASET: process.env.SANITY_STUDIO_DATASET!,
       SANITY_STUDIO_API_VERSION: process.env.SANITY_STUDIO_API_VERSION!,
@@ -89,7 +94,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function App() {
-  const { sanity, webcastInProgress, ENV, initial, query, params } =
+  const { sanity, webcastInProgress, ENV, initial, query, params , gaTrackingId} =
     useLoaderData<typeof loader>();
 
   const { data, loading } = useQuery<typeof initial.data>(query, params, {
@@ -126,6 +131,29 @@ export default function App() {
         id="scrollable"
         className="bg-cream font-sans flex flex-col min-h-dvh"
       >
+        {process.env.NODE_ENV === `development` || !gaTrackingId ? null : (
+          <>
+            <script src={`https://www.google.com/recaptcha/api.js?render=${ENV.GOOGLE_RECAPTCHA_SITE_KEY}`}></script>
+            <script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaTrackingId}`}
+            />
+            <script
+              async
+              id="gtag-init"
+              dangerouslySetInnerHTML={{
+                __html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gaTrackingId}', {
+                  page_path: window.location.pathname,
+                });
+              `,
+              }}
+            />
+          </>
+        )}
         {sanity.isStudioRoute ? (
           <Outlet />
         ) : (
