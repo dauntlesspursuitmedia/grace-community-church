@@ -78,12 +78,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     return json({ message: `` }, { status: 500 });
   }
 
-  const { email, phone, subject, message, name, ministries } =
+  const { email, phone, subject, message, name, ministries , captchaToken} =
     result.submittedData;
   const modifiedSubject =
     JSON.parse(ministries || "").find(
       (item: { value: string }) => item.value === subject
     )?.label ?? "General Inquiry";
+
+    console.log({email, phone, message, name, subject: modifiedSubject, })
 
   const sanitySubmission = await writeClient.createIfNotExists({
     _id: `$${email}-{message}`,
@@ -92,6 +94,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     message,
     name,
     subject: modifiedSubject,
+    recaptchaToken: captchaToken,
+    gotya: result.data["got-ya"],
     _type: `formSubmission`,
   });
 

@@ -27,6 +27,7 @@ import { inlineGallery } from "./objects/inlineGallery";
 import { cardsModule } from "./objects/cardsModule";
 import { textWithImageModule } from "./objects/textWithImageModule";
 import { callOutModule } from "./objects/calloutModule";
+import { formSubmissionType } from "./formSubmission";
 
 export default [
   siteConfig,
@@ -57,5 +58,6 @@ export default [
 	inlineGallery,
 	cardsModule,
 	textWithImageModule,
-	callOutModule
+	callOutModule,
+  formSubmissionType
 ];
