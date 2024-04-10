@@ -79,17 +79,17 @@ export const ContactForm = () => {
     <ValidatedForm
       id="contactForm"
       validator={contactFormValidator}
-      action="/resources/contactForm"
-      method="post"
+      // action="/resources/contactForm"
+      // method="post"
       onSubmit={async (deets, event) => {
         
         event.preventDefault()
 
-        submit(deets, {
-          method: `POST`,
-          action: `/resources/contactForm`,
-        });
-        console.log("form submitted")
+        // submit(deets, {
+        //   method: `POST`,
+        //   action: `/resources/contactForm`,
+        // });
+        // console.log("form submitted")
         // call grecaptcha.ready
         grecaptcha.ready(function () {
           // call execute recaptcha
