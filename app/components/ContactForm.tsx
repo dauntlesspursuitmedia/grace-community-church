@@ -94,7 +94,7 @@ export const ContactForm = () => {
         grecaptcha.ready(function () {
           // call execute recaptcha
           grecaptcha
-            .execute(`6LcRkwQmAAAAAOfKktDsoc6iZvm0CWf5eg0dtWlJ`, {
+            .execute(`6LcBb7YpAAAAAHIRznLVTNVMkAPfhpBeeXFSpbna`, {
               action: `submit`,
             })
             .then(function (token: string) {
