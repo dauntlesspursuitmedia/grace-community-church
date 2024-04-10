@@ -82,7 +82,12 @@ export const ContactForm = () => {
       // action="/resources/contactForm"
       method="post"
       onSubmit={async (deets, event) => {
-        event.preventDefault();
+     
+
+        submit(deets, {
+          method: `post`,
+          action: `/resources/contactForm`,
+        });
 
         // call grecaptcha.ready
         grecaptcha.ready(function () {
@@ -96,7 +101,7 @@ export const ContactForm = () => {
               deets.captchaToken = token;
               // finally submit the form data, re-using the method and action from the form
               submit(deets, {
-                method: `post`,
+                method: `POST`,
                 action: `/resources/contactForm`,
               });
             });
