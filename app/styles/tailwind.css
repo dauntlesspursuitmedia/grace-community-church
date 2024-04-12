@@ -67,8 +67,10 @@
 		grid-template-columns: 1fr;
 		min-height:400px;
 
+
 		@screen md {
 			min-height: initial;
+		height:500px;
 		}
 		@apply bg-cream-dark text-black shadow ;
 
@@ -76,7 +78,7 @@
 			@apply shadow-lg ;
 			/* height: 400px; */
 			img {
-
+				aspect-ratio: 4/2;
 				filter:grayscale(0)
 			}
 

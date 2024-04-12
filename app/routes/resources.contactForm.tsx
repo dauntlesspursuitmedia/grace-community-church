@@ -87,8 +87,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
     console.log({email, phone, message, name, subject: modifiedSubject, })
 
-  const sanitySubmission = await writeClient.createIfNotExists({
-    _id: `$${email}-{message}`,
+  const sanitySubmission = await writeClient.create({
+
     email,
     phone,
     message,
@@ -119,7 +119,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const msg = {
     // TODO: Figure out how to dynamically change between to address
     to: `luke@dauntlesspursuitmedia.com`,
-    from: `jon.hollifield@yahoo.com`,
+    from: `info@gccmanchester.com`,
     replyTo: result?.submittedData?.email,
     subject: `New contact form submission from ${result?.submittedData.name}`,
     text: `${result?.submittedData.message}`,

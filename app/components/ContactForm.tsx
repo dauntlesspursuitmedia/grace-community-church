@@ -7,6 +7,7 @@ import { cn } from "~/lib/misc";
 import { toTitleCase } from "~/lib/toTitleCase";
 import { HTMLInputTypeAttribute } from "react";
 import { useSearchParams, useSubmit } from "@remix-run/react";
+import { useGoogleRecaptcha } from "~/lib/useGoogleRecaptcha";
 export const contactFormValidator = withZod(
   z.object({
     "got-ya": z.string().optional(),
@@ -75,6 +76,11 @@ export const ContactForm = () => {
   const [searchParams] = useSearchParams();
 	const submit = useSubmit()
 
+  const recaptcha = useGoogleRecaptcha({
+    siteKey: '6LcBb7YpAAAAAHIRznLVTNVMkAPfhpBeeXFSpbna',
+    action: 'submit',
+  })
+
   return (
     <ValidatedForm
       id="contactForm"
@@ -84,30 +90,19 @@ export const ContactForm = () => {
       onSubmit={async (deets, event) => {
         
         event.preventDefault()
+        const token = await recaptcha.execute()
+        // update and submit form
 
-        // submit(deets, {
-        //   method: `POST`,
-        //   action: `/resources/contactForm`,
-        // });
-        // console.log("form submitted")
-        // call grecaptcha.ready
-        grecaptcha.ready(function () {
-          // call execute recaptcha
-          grecaptcha
-            .execute(`6LcBb7YpAAAAAHIRznLVTNVMkAPfhpBeeXFSpbna`, {
-              action: `submit`,
-            })
-            .then(function (token: string) {
-              // add token to form
-              deets.captchaToken = token;
-              // finally submit the form data, re-using the method and action from the form
-              submit(deets, {
-                method: `POST`,
-                action: `/resources/contactForm`,
-              });
-              console.log("form submitted")
-            });
+        // add token to form
+        deets.captchaToken = token;
+        // finally submit the form data, re-using the method and action from the form
+        submit(deets, {
+          method: `POST`,
+          action: `/resources/contactForm`,
         });
+        console.log("form submitted")
+
+       
       }}
       defaultValues={{
         name: "",
@@ -167,6 +162,7 @@ export const ContactForm = () => {
       <div className="ml-auto">
         <button
           type="submit"
+          disabled={!recaptcha.ready || isSubmitting}
           className="border-black border-[1px] text-black  hover:bg-black hover:border-black hover:text-white	focus:text-white focus:bg-black focus:border-black uppercase no-underline font-semibold tracking-[1.6px] p-2 transition-colors shadow-sm duration-150 ease-in-out hover:shadow-md flex gap-1"
         >
           <Send />

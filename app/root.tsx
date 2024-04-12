@@ -133,7 +133,7 @@ export default function App() {
       >
         {process.env.NODE_ENV === `development` || !gaTrackingId ? null : (
           <>
-            <script src={`https://www.google.com/recaptcha/api.js?render=${ENV.GOOGLE_RECAPTCHA_SITE_KEY}`}></script>
+            {/* <script src={`https://www.google.com/recaptcha/api.js?render=${ENV.GOOGLE_RECAPTCHA_SITE_KEY}`}></script> */}
             <script
               async
               src={`https://www.googletagmanager.com/gtag/js?id=${gaTrackingId}`}
