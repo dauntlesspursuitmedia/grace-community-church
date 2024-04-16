@@ -39,6 +39,6 @@ export default {
     },
     extend: {},
   },
-  plugins: [require("@tailwindcss/typography"), require("@tailwindcss/container-queries"), require("@tailwindcss/forms")],
+  plugins: [require("@tailwindcss/typography"), require("@tailwindcss/container-queries"), require("@tailwindcss/forms"),  require("tailwindcss-fluid-type")],
 };
 
