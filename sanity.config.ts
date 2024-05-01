@@ -7,7 +7,7 @@ import { locate } from '~/sanity/presentation/locate'
 import schema from '~/sanity/schema'
 import { structure } from '~/sanity/structure'
 import {media} from 'sanity-plugin-media'
-
+import {simplerColorInput} from 'sanity-plugin-simpler-color-input'
 // Define the actions that should be available for singleton documents
 const singletonActions = new Set(["publish", "discardChanges", "restore"])
 
@@ -21,6 +21,7 @@ export const config = defineConfig({
     structureTool({structure: structure}),
     visionTool(),
 		media(),
+    
     // presentationTool({ previewUrl: frontendUrl, locate }),
   ],
   basePath: "/studio",

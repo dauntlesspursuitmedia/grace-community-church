@@ -118,7 +118,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 	`;
   const msg = {
     // TODO: Figure out how to dynamically change between to address
-    to: `luke@dauntlesspursuitmedia.com`,
+    to: `jon@gccmanchester.com`,
     from: `info@gccmanchester.com`,
     replyTo: result?.submittedData?.email,
     subject: `New contact form submission from ${result?.submittedData.name}`,

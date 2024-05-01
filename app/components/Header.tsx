@@ -85,7 +85,7 @@ export const Header = ({
                       onClick={() => closeDropdown()}
                       className={({ isActive }) =>
                         cn(
-                          `text-white hover:text-yellow text-sm uppercase transition-colors duration-150 tracking-[1.6px] @4xl:text-base`,
+                          `text-white hover:text-yellow text-sm uppercase transition-colors duration-150 tracking-[1.6px] `,
                           isActive &&
                             " font-bold hover:text-white border-b-2 border-green"
                         )

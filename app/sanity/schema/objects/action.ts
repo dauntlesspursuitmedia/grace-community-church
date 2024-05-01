@@ -51,6 +51,18 @@ export const action = defineType({
 					name: "color",
 					title: "Button Color",
 					type: "string",
+					options: {
+						list: [
+						{title: "Black", value: "black"},
+						{title: "White", value:"white"},
+						{title: "Gray", value:"gray"},
+						{title: "Green", value:"green"},
+						{title: "Dark Green",value: "green-dark"},
+						{title: "Light Green",value: "green-light"},
+						{title: "Yellow", value: "yellow"},
+						{title: "Cream", value: "cream"}
+						]
+					}
 				}),
 				defineField({
 					name: "buttonStyle",

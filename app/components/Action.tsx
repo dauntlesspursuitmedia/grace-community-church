@@ -8,13 +8,16 @@ const buttonColor = {
     "first:bg-yellow first:border-0 first:hover:bg-yellow-lighter first:focus:bg-yellow-lighter hover:text-black text-white",
 		"dark-green": "bg-green-dark text-white hover:bg-green hover:text-white focus:text-white focus:bg-green focus:border-green-light",
 		black: "bg-black text-white hover:bg-black/60 hover:text-white focus:text-white  focus:bg-black/60",
-		green: "bg-green-dark"
+		green: "bg-green text-white hover:bg-green/60 hover:text-white  focus:bg-green/60 active:bg-green-dark",
+    "green-dark": "bg-green-dark text-white hover:bg-green-dark:60 focus:bg-green-dark/60 active:bg-green-dark",
+    "green-light": "bg-green-light text-white hover:bg-green-light/60 focus:bg-green-light/60 active:bg-green",
+    cream: "bg-cream text-black hover:bg-cream/60 hover:text-black focus:bg-cream/60 active:bg-cream"
 } as const;
 
 const outlineStyles = {
   yellow: "",
   green:
-    "border-green border-[1px] text-green  hover:bg-green hover:border-green hover:text-black	focus:text-black focus:bg-green focus:border-green",
+    "border-green border-[1px] text-white  hover:bg-green-light hover:border-green hover:text-black	focus:text-black focus:bg-green focus:border-green ",
   white:
     "border-white border-[1px] text-white  hover:bg-white hover:border-white hover:text-black	focus:text-black focus:bg-white focus:border-white",
   black:
@@ -27,7 +30,7 @@ export const Action = ({ action }: { action: z.infer<typeof actionZ> }) => {
         href={action.externalLink || ""}
         target="_blank"
         rel="noopener noreferrer"
-        className="first:bg-yellow first:border-0 first:hover:bg-yellow-lighter first:focus:bg-yellow-lighter p-4 border-white border-[1px] text-white"
+        className="first:bg-yellow bg-gre first:border-0 first:hover:bg-yellow-lighter first:focus:bg-yellow-lighter p-4 border-white border-[1px] text-white"
       >
         {action.title}
       </a>
