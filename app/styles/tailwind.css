@@ -218,7 +218,7 @@
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-
+			
 			@screen md {
 				padding-right: 20%;
 			}

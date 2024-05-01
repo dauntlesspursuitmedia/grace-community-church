@@ -48,11 +48,12 @@ const FormInput = ({
       >
         {label}
       </label>
-      <div className={cn("flex-1 max-w-96 flex flex-col", error && " gap-1")}>
+      <div className={cn("flex-1 max-w-96 flex flex-col w-full", error && " gap-1")}>
         {type === "textarea" ? (
           <textarea
             rows={4}
-            className="resize-y"
+
+            className="resize-y w-full"
             {...getInputProps({ id: name, placeholder: placeholder ?? label })}
           />
         ) : (
@@ -62,7 +63,7 @@ const FormInput = ({
               placeholder: placeholder ?? label,
               type,
             })}
-            className="border-gray/30 rounded-sm"
+            className="border-gray/30 rounded-sm w-full"
           />
         )}
         {error && <span className="text-sm text-[#ff0000]">{error}</span>}
@@ -148,7 +149,7 @@ export const ContactForm = () => {
           // defaultValue={defaultSubject}
           name="subject"
           label="Subject"
-          className="flex-1 max-w-96 border-gray/30 rounded-sm"
+          className="flex-1 max-w-96 w-full border-gray/30 rounded-sm"
         />
       </div>
 

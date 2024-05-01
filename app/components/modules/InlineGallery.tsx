@@ -8,7 +8,7 @@ export const InlineGallery = ({
   _type,
 }: z.infer<typeof inlineGalleryZ>) => {
   return (
-    <div className="inline-gallery ">
+    <div className="inline-gallery w-full">
       {images?.map((image, idx) => {
         return (
           <SanityImage
